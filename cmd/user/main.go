@@ -10,11 +10,13 @@ import (
 	etcd "github.com/a76yyyy/registry-etcd"
 	"github.com/a76yyyy/tiktok/cmd/user/dal"
 	user "github.com/a76yyyy/tiktok/cmd/user/kitex_gen/user/usersrv"
+	"github.com/a76yyyy/tiktok/pkg/dlog"
 	"github.com/a76yyyy/tiktok/pkg/jwt"
 	"github.com/a76yyyy/tiktok/pkg/middleware"
 	"github.com/a76yyyy/tiktok/pkg/ttviper"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
+
 	"github.com/cloudwego/kitex/server"
 
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
@@ -32,6 +34,11 @@ var (
 func Init() {
 	dal.Init(&Config)
 	Jwt = jwt.NewJWT([]byte(Config.Viper.GetString("JWT.signingKey")))
+	var logger klog.FullLogger = &dlog.ZapLogger{
+		StdLog: Config.InitLogger(),
+		Level:  klog.LevelInfo,
+	}
+	klog.SetLogger(logger)
 }
 
 func main() {
