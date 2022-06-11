@@ -18,12 +18,24 @@ package middleware
 import (
 	"context"
 
+	"github.com/a76yyyy/tiktok/pkg/dlog"
 	"github.com/cloudwego/kitex/pkg/endpoint"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
+	"go.uber.org/zap"
 )
 
 var _ endpoint.Middleware = CommonMiddleware
+
+func init() {
+	var logger dlog.ZapLogger = dlog.ZapLogger{
+		Level: klog.LevelInfo,
+	}
+
+	logger.SugaredLogger.Base = zap.L()
+
+	klog.SetLogger(&logger)
+}
 
 // CommonMiddleware common middleware print some rpc info、real request and real response
 func CommonMiddleware(next endpoint.Endpoint) endpoint.Endpoint {

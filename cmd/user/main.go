@@ -34,14 +34,19 @@ var (
 func Init() {
 	dal.Init(&Config)
 	Jwt = jwt.NewJWT([]byte(Config.Viper.GetString("JWT.signingKey")))
-	var logger klog.FullLogger = &dlog.ZapLogger{
-		StdLog: Config.InitLogger(),
-		Level:  klog.LevelInfo,
-	}
-	klog.SetLogger(logger)
 }
 
 func main() {
+	var logger dlog.ZapLogger = dlog.ZapLogger{
+		Level: klog.LevelInfo,
+	}
+
+	logger.SugaredLogger.Base = Config.InitLogger()
+
+	klog.SetLogger(&logger)
+
+	defer logger.SugaredLogger.Base.Sync()
+
 	r, err := etcd.NewEtcdRegistry([]string{EtcdAddress})
 	if err != nil {
 		klog.Fatal(err)

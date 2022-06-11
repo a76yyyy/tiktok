@@ -133,8 +133,8 @@ func CtxTracef(ctx context.Context, format string, v ...any) {
 }
 
 type ZapLogger struct {
-	StdLog *zap.Logger
-	Level  klog.Level
+	SugaredLogger
+	Level klog.Level
 }
 
 /**
@@ -150,93 +150,108 @@ func (ll *ZapLogger) SetLevel(lv klog.Level) {
 /**
 	Logger
 **/
-func (ll *ZapLogger) Fatal(v ...any) {
-	ll.StdLog.Sugar().Fatal(v)
+// func (ll *ZapLogger) Fatal(v ...any) {
+// 	ll.Fatal(v...)
+// }
+
+// func (ll *ZapLogger) Error(v ...any) {
+// 	ll.Error(v...)
+// }
+
+// func (ll *ZapLogger) Warn(v ...any) {
+// 	ll.Warn(v...)
+// }
+
+// func (ll *ZapLogger) Notice(v ...any) {
+// 	ll.DPanic(v...)
+// }
+
+func (s *SugaredLogger) Notice(args ...interface{}) {
+	s.log(zap.DPanicLevel, "", args, nil)
 }
 
-func (ll *ZapLogger) Error(v ...any) {
-	ll.StdLog.Sugar().Error(v)
+// func (ll *ZapLogger) Info(v ...any) {
+// 	ll.Info(v...)
+// }
+
+// func (ll *ZapLogger) Debug(v ...any) {
+// 	ll.Debug(v...)
+// }
+
+// func (ll *ZapLogger) Trace(v ...any) {
+// 	ll.Info(v...)
+// }
+
+func (s *SugaredLogger) Trace(args ...interface{}) {
+	s.log(zap.InfoLevel, "", args, nil)
 }
 
-func (ll *ZapLogger) Warn(v ...any) {
-	ll.StdLog.Sugar().Warn(v)
+// /**
+// 	FormatLogger
+// **/
+// func (ll *ZapLogger) Fatalf(format string, v ...any) {
+// 	ll.Fatalf(format, v...)
+// }
+
+// func (ll *ZapLogger) Errorf(format string, v ...any) {
+// 	ll.Errorf(format, v...)
+// }
+
+// func (ll *ZapLogger) Warnf(format string, v ...any) {
+// 	ll.Warnf(format, v...)
+// }
+
+// func (ll *ZapLogger) Noticef(format string, v ...any) {
+// 	ll.DPanicf(format, v...)
+// }
+
+func (s *SugaredLogger) Noticef(template string, args ...interface{}) {
+	s.log(zap.DPanicLevel, template, args, nil)
 }
 
-func (ll *ZapLogger) Notice(v ...any) {
-	ll.StdLog.Sugar().DPanic(v)
-}
+// func (ll *ZapLogger) Infof(format string, v ...any) {
+// 	ll.Infof(format, v...)
+// }
 
-func (ll *ZapLogger) Info(v ...any) {
-	ll.StdLog.Sugar().Info(v)
-}
+// func (ll *ZapLogger) Debugf(format string, v ...any) {
+// 	ll.Debugf(format, v...)
+// }
 
-func (ll *ZapLogger) Debug(v ...any) {
-	ll.StdLog.Sugar().Debug(v)
-	println(1111)
-}
+// func (ll *ZapLogger) Tracef(format string, v ...any) {
+// 	ll.Infof(format, v...)
+// }
 
-func (ll *ZapLogger) Trace(v ...any) {
-	ll.StdLog.Sugar().Info(v)
-}
-
-/**
-	FormatLogger
-**/
-func (ll *ZapLogger) Fatalf(format string, v ...any) {
-	ll.StdLog.Sugar().Fatalf(format, v)
-}
-
-func (ll *ZapLogger) Errorf(format string, v ...any) {
-	ll.StdLog.Sugar().Errorf(format, v)
-}
-
-func (ll *ZapLogger) Warnf(format string, v ...any) {
-	ll.StdLog.Sugar().Warnf(format, v)
-}
-
-func (ll *ZapLogger) Noticef(format string, v ...any) {
-	ll.StdLog.Sugar().DPanicf(format, v)
-}
-
-func (ll *ZapLogger) Infof(format string, v ...any) {
-	ll.StdLog.Sugar().Infof(format, v)
-}
-
-func (ll *ZapLogger) Debugf(format string, v ...any) {
-	ll.StdLog.Sugar().Debugf(format, v)
-}
-
-func (ll *ZapLogger) Tracef(format string, v ...any) {
-	ll.StdLog.Sugar().Infof(format, v)
+func (s *SugaredLogger) Tracef(template string, args ...interface{}) {
+	s.log(zap.InfoLevel, template, args, nil)
 }
 
 /**
 	CtxLogger
 **/
 func (ll *ZapLogger) CtxFatalf(ctx context.Context, format string, v ...any) {
-	ll.StdLog.Sugar().With("ctx", ctx).Fatalw(format, v...)
+	ll.With("ctx", ctx).Fatalw(format, v...)
 }
 
 func (ll *ZapLogger) CtxErrorf(ctx context.Context, format string, v ...any) {
-	ll.StdLog.Sugar().With("ctx", ctx).Errorw(format, v...)
+	ll.With("ctx", ctx).Errorw(format, v...)
 }
 
 func (ll *ZapLogger) CtxWarnf(ctx context.Context, format string, v ...any) {
-	ll.StdLog.Sugar().With("ctx", ctx).Warnw(format, v...)
+	ll.With("ctx", ctx).Warnw(format, v...)
 }
 
 func (ll *ZapLogger) CtxNoticef(ctx context.Context, format string, v ...any) {
-	ll.StdLog.Sugar().With("ctx", ctx).DPanicw(format, v...)
+	ll.With("ctx", ctx).DPanicw(format, v...)
 }
 
 func (ll *ZapLogger) CtxInfof(ctx context.Context, format string, v ...any) {
-	ll.StdLog.Sugar().With("ctx", ctx).Infow(format, v...)
+	ll.With("ctx", ctx).Infow(format, v...)
 }
 
 func (ll *ZapLogger) CtxDebugf(ctx context.Context, format string, v ...any) {
-	ll.StdLog.Sugar().With("ctx", ctx).Debugw(format, v...)
+	ll.With("ctx", ctx).Debugw(format, v...)
 }
 
 func (ll *ZapLogger) CtxTracef(ctx context.Context, format string, v ...any) {
-	ll.StdLog.Sugar().With("ctx", ctx).Infow(format, v...)
+	ll.With("ctx", ctx).Infow(format, v...)
 }
