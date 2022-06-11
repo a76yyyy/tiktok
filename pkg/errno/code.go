@@ -2,6 +2,11 @@ package errno
 
 import code "github.com/a76yyyy/ErrnoCode"
 
+const (
+	// ErrVideoNotFound - 400: Video not found.
+	codeErrVideoNotFound int = iota + 110201
+)
+
 var (
 	HttpSuccess              = NewHttpErr(code.ErrSuccess, 200, "OK")
 	ErrHttpUnknown           = NewHttpErr(code.ErrUnknown, 500, "Internal server error")
@@ -59,4 +64,5 @@ var (
 	ErrUserAlreadyExist = NewErrNo(code.ErrUserAlreadyExist, "User already exist")
 	ErrReachMaxCount    = NewErrNo(code.ErrReachMaxCount, "Secret reach the max count")
 	ErrSecretNotFound   = NewErrNo(code.ErrSecretNotFound, "Secret not found")
+	ErrVideoNotFound    = NewErrNo(codeErrVideoNotFound, "Video not found")
 )

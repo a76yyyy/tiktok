@@ -34,7 +34,6 @@ Server:
   Name: "TiktokAPIServer"
   Address: "0.0.0.0"
   Port: 8088
-  Table: "user"
 
 Client:
   Echo: true
@@ -52,4 +51,3 @@ MySQL:
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"
-  TableName: "api"

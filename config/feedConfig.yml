@@ -9,7 +9,7 @@ Log:
   encoderConfig:
     #  # https://godoc.org/go.uber.org/zap/zapcore#EncoderConfig
     timeKey: "ts"
-    nameKey: "userLogger"
+    nameKey: "feedLogger"
     messageKey: "msg"
     levelKey: "level"
     #  levelEncoder: "lowercase"
@@ -17,7 +17,7 @@ Log:
   #  StacktraceKey: "stacktrace"
   outputPaths:
     - "stdout"
-    - "log/User.log"
+    - "log/Feed.log"
   #errorOutputPaths:
   #  - "stderr"
   #initialFields:
@@ -31,9 +31,9 @@ Etcd:
   Port: 2379
 
 Server:
-  Name: "TiktokUserServer"
+  Name: "TiktokFeedServer"
   Address: "127.0.0.1"
-  Port: 8081
+  Port: 8082
 
 Client:
   Echo: true

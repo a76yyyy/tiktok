@@ -56,7 +56,7 @@ func InitDB(config *ttviper.Config) {
 		panic(err)
 	}
 
-	if err := DB.AutoMigrate(&User{}, &Video{}); err != nil {
+	if err := DB.AutoMigrate(&User{}, &Video{}, &FavoriteVideo{}); err != nil {
 		panic(err)
 	}
 }

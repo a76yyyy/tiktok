@@ -70,6 +70,8 @@ func main() {
 	user.POST("/login/", handlers.Login)
 	user.POST("/register/", handlers.Register)
 	user.GET("/", handlers.GetUserById)
+	video := r.Group("/feed")
+	video.GET("/", handlers.GetUserFeed)
 
 	if err := http.ListenAndServe(ServiceAddr, r); err != nil {
 		klog.Fatal(err)
