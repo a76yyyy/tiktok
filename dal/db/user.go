@@ -29,10 +29,6 @@ type User struct {
 	FollowerCount  int    `gorm:"default:0"`
 }
 
-func (u *User) TableName() string {
-	return *TableName
-}
-
 // MGetUsers multiple get list of user info
 func MGetUsers(ctx context.Context, userIDs []int64) ([]*User, error) {
 	res := make([]*User, 0)

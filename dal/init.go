@@ -16,7 +16,7 @@
 package dal
 
 import (
-	db "github.com/a76yyyy/tiktok/cmd/user/dal/db"
+	db "github.com/a76yyyy/tiktok/dal/db"
 	"github.com/a76yyyy/tiktok/pkg/ttviper"
 )
 

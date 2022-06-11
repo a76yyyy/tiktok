@@ -8,8 +8,8 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 
 	etcd "github.com/a76yyyy/registry-etcd"
-	"github.com/a76yyyy/tiktok/cmd/user/dal"
-	user "github.com/a76yyyy/tiktok/cmd/user/kitex_gen/user/usersrv"
+	"github.com/a76yyyy/tiktok/dal"
+	user "github.com/a76yyyy/tiktok/kitex_gen/user/usersrv"
 	"github.com/a76yyyy/tiktok/pkg/dlog"
 	"github.com/a76yyyy/tiktok/pkg/jwt"
 	"github.com/a76yyyy/tiktok/pkg/middleware"

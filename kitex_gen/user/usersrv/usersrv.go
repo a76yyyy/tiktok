@@ -5,7 +5,7 @@ package usersrv
 import (
 	"context"
 	"fmt"
-	"github.com/a76yyyy/tiktok/cmd/user/kitex_gen/user"
+	"github.com/a76yyyy/tiktok/kitex_gen/user"
 	"github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
 	"github.com/cloudwego/kitex/pkg/streaming"

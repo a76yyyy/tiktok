@@ -20,7 +20,8 @@ import (
 
 	"github.com/a76yyyy/tiktok/pkg/errno"
 
-	"github.com/a76yyyy/tiktok/cmd/user/kitex_gen/user"
+	"github.com/a76yyyy/tiktok/kitex_gen/feed"
+	"github.com/a76yyyy/tiktok/kitex_gen/user"
 )
 
 // BuilduserRegisterResp build userRegisterResp from error
@@ -59,4 +60,23 @@ func BuilduserUserResp(err error) *user.DouyinUserResponse {
 
 func userResp(err errno.ErrNo) *user.DouyinUserResponse {
 	return &user.DouyinUserResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
+}
+
+// BuildVideoResp build VideoResp from error
+func BuildVideoResp(err error) *feed.DouyinFeedResponse {
+	if err == nil {
+		return videoResp(errno.Success)
+	}
+
+	e := errno.ErrNo{}
+	if errors.As(err, &e) {
+		return videoResp(e)
+	}
+
+	s := errno.ErrUnknown.WithMessage(err.Error())
+	return videoResp(s)
+}
+
+func videoResp(err errno.ErrNo) *feed.DouyinFeedResponse {
+	return &feed.DouyinFeedResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
 }

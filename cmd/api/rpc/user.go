@@ -21,8 +21,8 @@ import (
 	"time"
 
 	etcd "github.com/a76yyyy/registry-etcd"
-	"github.com/a76yyyy/tiktok/cmd/user/kitex_gen/user"
-	"github.com/a76yyyy/tiktok/cmd/user/kitex_gen/user/usersrv"
+	"github.com/a76yyyy/tiktok/kitex_gen/user"
+	"github.com/a76yyyy/tiktok/kitex_gen/user/usersrv"
 	"github.com/a76yyyy/tiktok/pkg/errno"
 	"github.com/a76yyyy/tiktok/pkg/middleware"
 	"github.com/a76yyyy/tiktok/pkg/ttviper"

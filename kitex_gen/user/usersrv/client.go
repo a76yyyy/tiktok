@@ -4,7 +4,7 @@ package usersrv
 
 import (
 	"context"
-	"github.com/a76yyyy/tiktok/cmd/user/kitex_gen/user"
+	"github.com/a76yyyy/tiktok/kitex_gen/user"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
 )

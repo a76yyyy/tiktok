@@ -19,22 +19,19 @@ import (
 	"fmt"
 
 	"github.com/a76yyyy/tiktok/pkg/ttviper"
-	"github.com/spf13/pflag"
 	"github.com/uptrace/opentelemetry-go-extra/otelgorm"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 var (
-	DB        *gorm.DB
-	TableName = pflag.String("mysql.tablename", "", "Mysql Table Name")
+	DB *gorm.DB
 )
 
 // Init init DB
 func InitDB(config *ttviper.Config) {
 	var err error
 	viper := config.Viper
-	*TableName = viper.GetString("mysql.tablename")
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=%t&loc=%s",
 		viper.GetString("mysql.user"),
 		viper.GetString("mysql.password"),
@@ -59,7 +56,7 @@ func InitDB(config *ttviper.Config) {
 		panic(err)
 	}
 
-	if err := DB.AutoMigrate(&User{}); err != nil {
+	if err := DB.AutoMigrate(&User{}, &Video{}); err != nil {
 		panic(err)
 	}
 }

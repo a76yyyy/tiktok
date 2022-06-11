@@ -16,30 +16,39 @@
 package pack
 
 import (
-	"github.com/a76yyyy/tiktok/cmd/user/kitex_gen/user"
+	"github.com/a76yyyy/tiktok/kitex_gen/feed"
 
-	"github.com/a76yyyy/tiktok/cmd/user/dal/db"
+	"github.com/a76yyyy/tiktok/dal/db"
 )
 
-// User pack user info
-func User(u *db.User) *user.User {
+// Video pack feed info
+func Video(u *db.Video) *feed.Video {
 	if u == nil {
 		return nil
 	}
 
-	follow_count := int64(u.FollowerCount)
-	follower_count := int64(u.FollowerCount)
+	author := User(&u.Author)
+	favorite_count := int64(u.FavoriteCount)
+	comment_count := int64(u.CommentCount)
 
-	return &user.User{Id: int64(u.ID), Name: u.UserName, FollowCount: &follow_count, FollowerCount: &follower_count}
+	return &feed.Video{
+		Id:            int64(u.ID),
+		Author:        author,
+		PlayUrl:       u.PlayUrl,
+		CoverUrl:      u.CoverUrl,
+		FavoriteCount: favorite_count,
+		CommentCount:  comment_count,
+		Title:         u.Title,
+	}
 }
 
-// Users pack list of user info
-func Users(us []*db.User) []*user.User {
-	users := make([]*user.User, 0)
+// Videos pack list of user info
+func Videos(us []*db.Video) []*feed.Video {
+	videos := make([]*feed.Video, 0)
 	for _, u := range us {
-		if user2 := User(u); user2 != nil {
-			users = append(users, user2)
+		if user2 := Video(u); user2 != nil {
+			videos = append(videos, user2)
 		}
 	}
-	return users
+	return videos
 }
