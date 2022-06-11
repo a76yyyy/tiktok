@@ -1,0 +1,40 @@
+syntax = "proto3";
+package user;
+option go_package = "user";
+
+message douyin_user_register_request {
+    string username = 1; // 注册用户名，最长32个字符
+    string password = 2; // 密码，最长32个字符
+}
+
+message douyin_user_register_response {
+    int32 status_code = 1; // 状态码，0-成功，其他值-失败
+    optional string status_msg = 2; // 返回状态描述
+    int64 user_id = 3; // 用户id
+    string token = 4; // 用户鉴权token
+}
+
+message douyin_user_request {
+    int64 user_id = 1; // 用户id
+    string token = 2; // 用户鉴权token
+}
+
+message douyin_user_response {
+    int32 status_code = 1; // 状态码，0-成功，其他值-失败
+    optional string status_msg = 2; // 返回状态描述
+    User user = 3; // 用户信息
+}
+
+message User {
+    int64 id = 1; // 用户id
+    string name = 2; // 用户名称
+    optional int64 follow_count = 3; // 关注总数
+    optional int64 follower_count = 4; // 粉丝总数
+    bool is_follow = 5; // true-已关注，false-未关注
+}
+
+service UserSrv{
+    rpc Register (douyin_user_register_request) returns (douyin_user_register_response) {}
+    rpc Login (douyin_user_register_request) returns (douyin_user_register_response) {}
+    rpc GetUserById (douyin_user_request) returns (douyin_user_response) {}
+}

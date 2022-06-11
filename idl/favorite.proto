@@ -1,0 +1,33 @@
+syntax = "proto3";
+package favorite;
+option go_package = "favorite";
+
+import "feed.proto";
+
+message douyin_favorite_action_request {
+    int64 user_id = 1; // 用户id
+    string token = 2; // 用户鉴权token
+    int64 video_id = 3; // 视频id
+    int32 action_type = 4; // 1-点赞，2-取消点赞
+}
+
+message douyin_favorite_action_response {
+    int32 status_code = 1; // 状态码，0-成功，其他值-失败
+    optional string status_msg = 2; // 返回状态描述
+}
+
+message douyin_favorite_list_request {
+    int64 user_id = 1; // 用户id
+    string token = 2; // 用户鉴权token
+}
+
+message douyin_favorite_list_response {
+    int32 status_code = 1; // 状态码，0-成功，其他值-失败
+    optional string status_msg = 2; // 返回状态描述
+    repeated feed.Video video_list = 3; // 用户点赞视频列表
+}
+
+service FavoriteSrv{
+    rpc FavoriteAction(douyin_favorite_action_request) returns (douyin_favorite_action_response);
+    rpc FavoriteList(douyin_favorite_list_request) returns (douyin_favorite_list_response);
+}

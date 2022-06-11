@@ -1,0 +1,32 @@
+syntax = "proto3";
+package publish;
+option go_package = "publish";
+
+import "feed.proto";
+
+message douyin_publish_action_request {
+    string token = 1; // 用户鉴权token
+    bytes data = 2; // 视频数据
+    string title = 3; // 视频标题
+}
+
+message douyin_publish_action_response {
+    int32 status_code = 1; // 状态码，0-成功，其他值-失败
+    optional string status_msg = 2; // 返回状态描述
+}
+
+message douyin_publish_list_request {
+    int64 user_id = 1; // 用户id
+    string token = 2; // 用户鉴权token
+}
+
+message douyin_publish_list_response {
+    int32 status_code = 1; // 状态码，0-成功，其他值-失败
+    optional string status_msg = 2; // 返回状态描述
+    repeated feed.Video video_list = 3; // 用户发布的视频列表
+}
+
+service PublishSrv{
+    rpc PublishAction(douyin_publish_action_request) returns (douyin_publish_action_response);
+    rpc PublishList(douyin_publish_list_request) returns (douyin_publish_list_response);
+}

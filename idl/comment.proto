@@ -1,0 +1,43 @@
+syntax = "proto3";
+package comment;
+option go_package = "comment";
+
+import "user.proto";
+
+message douyin_comment_action_request {
+    int64 user_id = 1; // 用户id
+    string token = 2; // 用户鉴权token
+    int64 video_id = 3; // 视频id
+    int32 action_type = 4; // 1-发布评论，2-删除评论
+    optional string comment_text = 5; // 用户填写的评论内容，在action_type=1的时候使用
+    optional int64 comment_id = 6; // 要删除的评论id，在action_type=2的时候使用
+}
+
+message douyin_comment_action_response {
+    int32 status_code = 1; // 状态码，0-成功，其他值-失败
+    optional string status_msg = 2; // 返回状态描述
+    optional Comment comment = 3; // 评论成功返回评论内容，不需要重新拉取整个列表
+}
+
+message douyin_comment_list_request {
+    string token = 1; // 用户鉴权token
+    int64 video_id = 2; // 视频id
+}
+
+message douyin_comment_list_response {
+    int32 status_code = 1; // 状态码，0-成功，其他值-失败
+    optional string status_msg = 2; // 返回状态描述
+    repeated Comment comment_list = 3; // 评论列表
+}
+
+message Comment {
+    int64 id = 1; // 视频评论id
+    user.User user =2; // 评论用户信息
+    string content = 3; // 评论内容
+    string create_date = 4; // 评论发布日期，格式 mm-dd
+}
+
+service CommentSrv{
+    rpc CommentAction(douyin_comment_action_request) returns (douyin_comment_action_response);
+    rpc CommentList(douyin_comment_list_request) returns (douyin_comment_list_response);
+}

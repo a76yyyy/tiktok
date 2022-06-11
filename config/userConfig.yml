@@ -1,0 +1,55 @@
+Global:
+  Source: "config(local)"
+  ChangeMe: "v3"
+
+Log:
+  level: "info"
+  development: false
+  encoding: "console" # console or json
+  encoderConfig:
+    #  # https://godoc.org/go.uber.org/zap/zapcore#EncoderConfig
+    timeKey: "ts"
+    nameKey: "userLogger"
+    messageKey: "msg"
+    levelKey: "level"
+    #  levelEncoder: "lowercase"
+    callerKey: "caller"
+  #  StacktraceKey: "stacktrace"
+  outputPaths:
+    - "stdout"
+    - "log/User.log"
+  #errorOutputPaths:
+  #  - "stderr"
+  #initialFields:
+  #  foo: "bar"
+
+JWT:
+  signingKey: "signingKey"
+
+Etcd:
+  Address: "127.0.0.1"
+  Port: 2379
+
+Server:
+  Name: "TiktokUserServer"
+  Address: "127.0.0.1"
+  Port: 8081
+  Table: "user"
+
+Client:
+  Echo: true
+  Foo: "bar"
+  Servers:
+    - "127.0.0.1"
+    - "192.168.1.1"
+
+MySQL:
+  Host: "127.0.0.1"
+  Port: 8091
+  User: "tiktok"
+  Password: "password"
+  DBName: "Tiktok"
+  CharSet: "utf8mb4"
+  ParseTime: true
+  loc: "Local"
+  TableName: "user"
