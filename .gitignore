@@ -6,3 +6,5 @@ log/
 *.log
 
 local_*
+
+__debug_*
