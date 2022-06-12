@@ -9,8 +9,8 @@ import (
 
 type Video struct {
 	gorm.Model
-	// UpdatedAt     time.Time `gorm:"column:update_time;not null;index:idx_update" `
-	Author        User `gorm:"ForeignKey:AuthorID;AssociationForeignKey:ID"`
+	UpdatedAt     time.Time `gorm:"column:update_time;not null;index:idx_update" `
+	Author        User      `gorm:"ForeignKey:AuthorID;AssociationForeignKey:ID"`
 	AuthorID      int
 	PlayUrl       string `gorm:"type:varchar(255);not null"`
 	CoverUrl      string `gorm:"type:varchar(255)"`
@@ -20,10 +20,16 @@ type Video struct {
 }
 
 // MGetVideoss multiple get list of videos info
-func MGetVideos(ctx context.Context, latestTime int64) ([]*Video, error) {
+func MGetVideos(ctx context.Context, limit int, latestTime *int64) ([]*Video, error) {
 	videos := make([]*Video, 0)
 
-	if err := DB.WithContext(ctx).Limit(30).Order("update_time desc").Find(&videos, "update_time < ?", time.UnixMilli(latestTime)).Error; err != nil {
+	if latestTime == nil {
+		cur_time := int64(time.Now().UnixMilli())
+		latestTime = &cur_time
+	}
+	conn := DB.WithContext(ctx).Model(&Video{})
+
+	if err := conn.Limit(limit).Order("update_time desc").Find(&videos, "update_time < ?", time.UnixMilli(*latestTime)).Error; err != nil {
 		return nil, err
 	}
 	return videos, nil

@@ -14,6 +14,10 @@ import (
 	"github.com/a76yyyy/tiktok/dal/db"
 )
 
+const (
+	LIMIT = 30 // 单次返回最大视频数
+)
+
 type GetUserFeedService struct {
 	ctx context.Context
 }
@@ -24,9 +28,8 @@ func NewGetUserFeedService(ctx context.Context) *GetUserFeedService {
 }
 
 // GetUserFeed get feed info.
-func (s *GetUserFeedService) GetUserFeed(req *feed.DouyinFeedRequest, uid int) (vis []*feed.Video, nextTime int64, err error) {
-
-	videos, err := db.MGetVideos(s.ctx, *req.LatestTime)
+func (s *GetUserFeedService) GetUserFeed(req *feed.DouyinFeedRequest, uid int64) (vis []*feed.Video, nextTime int64, err error) {
+	videos, err := db.MGetVideos(s.ctx, LIMIT, req.LatestTime)
 	if err != nil {
 		return vis, nextTime, err
 	}
@@ -49,7 +52,7 @@ func (s *GetUserFeedService) GetUserFeed(req *feed.DouyinFeedRequest, uid int) (
 		}
 		flag := false
 		if uid != 0 {
-			if result, err := db.GetFavoriteVideo(s.ctx, uid, int(v.ID)); err != nil {
+			if result, err := db.GetFavoriteVideo(s.ctx, uid, int64(v.ID)); err != nil {
 				return vis, nextTime, err
 			} else if result.VideoID > 0 {
 				flag = true

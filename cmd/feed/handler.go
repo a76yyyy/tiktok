@@ -14,14 +14,14 @@ type FeedSrvImpl struct{}
 
 // GetUserFeed implements the FeedSrvImpl interface.
 func (s *FeedSrvImpl) GetUserFeed(ctx context.Context, req *feed.DouyinFeedRequest) (resp *feed.DouyinFeedResponse, err error) {
-	uid := 0
+	var uid int64 = 0
 	if *req.Token != "" {
 		claim, err := Jwt.ParseToken(*req.Token)
 		if err != nil {
 			resp = pack.BuildVideoResp(errno.ErrTokenInvalid)
 			return resp, nil
 		} else {
-			uid = int(claim.Id)
+			uid = claim.Id
 		}
 	}
 
