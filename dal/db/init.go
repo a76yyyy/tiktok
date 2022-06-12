@@ -17,21 +17,29 @@ package db
 
 import (
 	"fmt"
+	"time"
 
+	"github.com/a76yyyy/tiktok/pkg/dlog"
 	"github.com/a76yyyy/tiktok/pkg/ttviper"
 	"github.com/uptrace/opentelemetry-go-extra/otelgorm"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"moul.io/zapgorm2"
 )
 
 var (
-	DB *gorm.DB
+	DB     *gorm.DB
+	Config = ttviper.ConfigInit("TIKTOK_DB", "dbConfig")
 )
 
 // Init init DB
-func InitDB(config *ttviper.Config) {
+func InitDB() {
 	var err error
-	viper := config.Viper
+
+	logger := zapgorm2.New(dlog.InitLog())
+	logger.SetAsDefault() // optional: configure gorm to use this zapgorm.Logger for callbacks
+
+	viper := Config.Viper
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=%t&loc=%s",
 		viper.GetString("mysql.user"),
 		viper.GetString("mysql.password"),
@@ -46,21 +54,39 @@ func InitDB(config *ttviper.Config) {
 		&gorm.Config{
 			// PrepareStmt: true,
 			// SkipDefaultTransaction: true,
+			Logger: logger,
 		},
 	)
 	if err != nil {
-		panic(err)
+		logger.ZapLogger.Panic(err.Error())
 	}
 
 	if err = DB.Use(otelgorm.NewPlugin()); err != nil {
-		panic(err)
+		logger.ZapLogger.Panic(err.Error())
 	}
 
-	if err := DB.AutoMigrate(&User{}, &Video{}, &FavoriteVideo{}); err != nil {
-		panic(err)
+	if err := DB.AutoMigrate(&User{}, &Video{}, &FavoriteRelation{}, &Comment{}, &Relation{}); err != nil {
+		logger.ZapLogger.Panic(err.Error())
 	}
+
+	sqlDB, err := DB.DB()
+	if err != nil {
+		logger.ZapLogger.Panic(err.Error())
+	}
+
+	if err := sqlDB.Ping(); err != nil {
+		logger.ZapLogger.Panic(err.Error())
+	}
+	// SetMaxIdleConns 设置空闲连接池中连接的最大数量
+	sqlDB.SetMaxIdleConns(viper.GetInt("mysql.maxIdleConns"))
+
+	// SetMaxOpenConns 设置打开数据库连接的最大数量。
+	sqlDB.SetMaxOpenConns(viper.GetInt("mysql.maxOpenConns"))
+
+	// SetConnMaxLifetime 设置了连接可复用的最大时间。
+	sqlDB.SetConnMaxLifetime(time.Hour)
 }
 
-func Init(config *ttviper.Config) {
-	InitDB(config)
+func Init() {
+	InitDB()
 }

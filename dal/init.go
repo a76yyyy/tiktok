@@ -17,10 +17,9 @@ package dal
 
 import (
 	db "github.com/a76yyyy/tiktok/dal/db"
-	"github.com/a76yyyy/tiktok/pkg/ttviper"
 )
 
 // Init init dal
-func Init(config *ttviper.Config) {
-	db.Init(config) // mysql init
+func Init() {
+	db.Init() // mysql init
 }
