@@ -38,7 +38,7 @@ func GetUserFeed(c *gin.Context) {
 		Token:      feedVar.Token,
 	})
 	if err != nil {
-		SendResponse(c, pack.BuilduserUserResp(errno.ConvertErr(err)))
+		SendResponse(c, pack.BuildVideoResp(errno.ConvertErr(err)))
 		return
 	}
 	SendResponse(c, resp)
