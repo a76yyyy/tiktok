@@ -25,6 +25,7 @@ import (
 	"go.uber.org/zap"
 
 	// jwt "github.com/appleboy/gin-jwt/v2"
+	"github.com/a76yyyy/tiktok/pkg/dlog"
 	"github.com/a76yyyy/tiktok/pkg/jwt"
 	"github.com/a76yyyy/tiktok/pkg/ttviper"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -46,7 +47,7 @@ func Init() {
 }
 
 func main() {
-	logger := Config.InitLogger()
+	logger := dlog.InitLog()
 	defer logger.Sync()
 
 	zap.ReplaceGlobals(logger)
@@ -66,12 +67,31 @@ func main() {
 	r.Use(ginzap.RecoveryWithZap(zap.L(), true))
 
 	douyin := r.Group("/douyin")
+
 	user := douyin.Group("/user")
 	user.POST("/login/", handlers.Login)
 	user.POST("/register/", handlers.Register)
 	user.GET("/", handlers.GetUserById)
-	video := r.Group("/feed")
+
+	video := douyin.Group("/feed")
 	video.GET("/", handlers.GetUserFeed)
+
+	publish := douyin.Group("/publish")
+	publish.POST("/action/", handlers.PublishAction)
+	publish.GET("/list/", handlers.PublishList)
+
+	favorite := douyin.Group("/favorite")
+	favorite.POST("/action/", handlers.FavoriteAction)
+	favorite.GET("/list/", handlers.FavoriteList)
+
+	comment := douyin.Group("/comment")
+	comment.POST("/action/", handlers.CommentAction)
+	comment.GET("/list/", handlers.CommentList)
+
+	relation := douyin.Group("/relation")
+	relation.POST("/action/", handlers.RelationAction)
+	relation.GET("/follow/list/", handlers.RelationFollowList)
+	relation.GET("/follower/list/", handlers.RelationFollowerList)
 
 	if err := http.ListenAndServe(ServiceAddr, r); err != nil {
 		klog.Fatal(err)
