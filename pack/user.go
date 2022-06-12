@@ -29,7 +29,6 @@ func User(u *db.User) *user.User {
 
 	follow_count := int64(u.FollowerCount)
 	follower_count := int64(u.FollowerCount)
-
 	return &user.User{Id: int64(u.ID), Name: u.UserName, FollowCount: &follow_count, FollowerCount: &follower_count}
 }
 

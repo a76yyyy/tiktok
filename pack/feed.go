@@ -1,54 +1,54 @@
-// Copyright 2021 CloudWeGo Authors
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-
 package pack
 
 import (
+	"context"
+
 	"github.com/a76yyyy/tiktok/kitex_gen/feed"
 
 	"github.com/a76yyyy/tiktok/dal/db"
 )
 
 // Video pack feed info
-func Video(u *db.Video) *feed.Video {
-	if u == nil {
+func Video(ctx context.Context, v *db.Video, uid int64) *feed.Video {
+	if v == nil {
 		return nil
 	}
+	user, _ := db.MGetUser(ctx, uid)
 
-	author := User(&u.Author)
-	favorite_count := int64(u.FavoriteCount)
-	comment_count := int64(u.CommentCount)
+	author := User(user)
+	favorite_count := int64(v.FavoriteCount)
+	comment_count := int64(v.CommentCount)
 
 	return &feed.Video{
-		Id:            int64(u.ID),
+		Id:            int64(v.ID),
 		Author:        author,
-		PlayUrl:       u.PlayUrl,
-		CoverUrl:      u.CoverUrl,
+		PlayUrl:       v.PlayUrl,
+		CoverUrl:      v.CoverUrl,
 		FavoriteCount: favorite_count,
 		CommentCount:  comment_count,
-		Title:         u.Title,
+		Title:         v.Title,
 	}
 }
 
-// Videos pack list of user info
-func Videos(us []*db.Video) []*feed.Video {
+// Videos pack list of video info
+func Videos(ctx context.Context, vs []*db.Video, uid *int64) ([]*feed.Video, error) {
 	videos := make([]*feed.Video, 0)
-	for _, u := range us {
-		if user2 := Video(u); user2 != nil {
-			videos = append(videos, user2)
+	for _, v := range vs {
+		if video2 := Video(ctx, v, int64(v.AuthorID)); video2 != nil {
+			flag := false
+			if *uid != 0 {
+				if result, err := db.GetFavoriteRelation(ctx, *uid, int64(v.ID)); err != nil {
+					flag = false
+				} else if result.VideoID > 0 {
+					flag = true
+				} else {
+					flag = false
+				}
+
+			}
+			video2.IsFavorite = flag
+			videos = append(videos, video2)
 		}
 	}
-	return videos
+	return videos, nil
 }
