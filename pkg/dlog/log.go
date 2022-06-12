@@ -9,9 +9,13 @@ import (
 	"go.uber.org/zap"
 )
 
-var logger klog.FullLogger
+var (
+	logger klog.FullLogger
+	config = ttviper.ConfigInit("TIKTOK_LOG", "logConfig")
+)
 
-func InitLog(config *ttviper.Config) *zap.Logger {
+func InitLog() *zap.Logger {
+
 	return config.InitLogger()
 }
 

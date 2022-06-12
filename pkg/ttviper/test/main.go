@@ -12,6 +12,7 @@ import (
 
 	"time"
 
+	"github.com/a76yyyy/tiktok/pkg/dlog"
 	"github.com/a76yyyy/tiktok/pkg/ttviper"
 	_ "github.com/spf13/viper/remote" // enabble viper remote config
 )
@@ -21,7 +22,7 @@ func main() {
 	config := ttviper.ConfigInit("TIKTOK", "userConfig")
 	viper := config.Viper
 
-	logger := config.InitLogger()
+	logger := dlog.InitLog()
 	defer logger.Sync()
 	logger.Info("logger construction succeeded")
 
