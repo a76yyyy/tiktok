@@ -5,11 +5,9 @@ import (
 	"sort"
 	"time"
 
-	"github.com/a76yyyy/tiktok/cmd/user/command"
-	"github.com/a76yyyy/tiktok/pkg/errno"
+	"github.com/a76yyyy/tiktok/pack"
 
 	"github.com/a76yyyy/tiktok/kitex_gen/feed"
-	"github.com/a76yyyy/tiktok/kitex_gen/user"
 
 	"github.com/a76yyyy/tiktok/dal/db"
 )
@@ -33,8 +31,13 @@ func (s *GetUserFeedService) GetUserFeed(req *feed.DouyinFeedRequest, uid int64)
 	if err != nil {
 		return vis, nextTime, err
 	}
+
 	if len(videos) == 0 {
-		return vis, nextTime, errno.ErrVideoNotFound
+		return vis, nextTime, nil
+	}
+
+	if vis, err = pack.Videos(s.ctx, videos, &uid); err != nil {
+		return vis, nextTime, nil
 	}
 
 	if len(videos) > 0 {
@@ -44,32 +47,6 @@ func (s *GetUserFeedService) GetUserFeed(req *feed.DouyinFeedRequest, uid int64)
 		nextTime = videos[len(videos)-1].UpdatedAt.UnixMilli()
 	} else {
 		nextTime = time.Now().UnixMilli()
-	}
-	for _, v := range videos {
-		user, err := command.NewMGetUserService(s.ctx).MGetUser(&user.DouyinUserRequest{UserId: int64(v.AuthorID)})
-		if err != nil {
-			return vis, nextTime, err
-		}
-		flag := false
-		if uid != 0 {
-			if result, err := db.GetFavoriteVideo(s.ctx, uid, int64(v.ID)); err != nil {
-				return vis, nextTime, err
-			} else if result.VideoID > 0 {
-				flag = true
-			} else {
-				flag = false
-			}
-
-		}
-		vis = append(vis, &feed.Video{
-			Id:            int64(v.ID),
-			Author:        user,
-			PlayUrl:       v.PlayUrl,
-			CoverUrl:      v.CoverUrl,
-			FavoriteCount: int64(v.FavoriteCount),
-			CommentCount:  int64(v.CommentCount),
-			IsFavorite:    flag, // TODO 判断这个视频是否自己喜欢
-		})
 	}
 
 	return vis, nextTime, nil
