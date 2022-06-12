@@ -24,4 +24,16 @@ func InitRPC(Config *ttviper.Config) {
 
 	FeedConfig := ttviper.ConfigInit("TIKTOK_FEED", "feedConfig")
 	initFeedRpc(&FeedConfig)
+
+	PublishConfig := ttviper.ConfigInit("TIKTOK_PUBLISH", "publishConfig")
+	initPublishRpc(&PublishConfig)
+
+	FavoriteConfig := ttviper.ConfigInit("TIKTOK_FAVORITE", "favoriteConfig")
+	initFavoriteRpc(&FavoriteConfig)
+
+	CommentConfig := ttviper.ConfigInit("TIKTOK_COMMENT", "commentConfig")
+	initCommentRpc(&CommentConfig)
+
+	RelationConfig := ttviper.ConfigInit("TIKTOK_RELATION", "relationConfig")
+	initRelationRpc(&RelationConfig)
 }

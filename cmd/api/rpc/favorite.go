@@ -6,8 +6,8 @@ import (
 	"time"
 
 	etcd "github.com/a76yyyy/registry-etcd"
-	"github.com/a76yyyy/tiktok/kitex_gen/user"
-	"github.com/a76yyyy/tiktok/kitex_gen/user/usersrv"
+	"github.com/a76yyyy/tiktok/kitex_gen/favorite"
+	"github.com/a76yyyy/tiktok/kitex_gen/favorite/favoritesrv"
 	"github.com/a76yyyy/tiktok/pkg/errno"
 	"github.com/a76yyyy/tiktok/pkg/middleware"
 	"github.com/a76yyyy/tiktok/pkg/ttviper"
@@ -18,9 +18,9 @@ import (
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 )
 
-var userClient usersrv.Client
+var favoriteClient favoritesrv.Client
 
-func initUserRpc(Config *ttviper.Config) {
+func initFavoriteRpc(Config *ttviper.Config) {
 	EtcdAddress := fmt.Sprintf("%s:%d", Config.Viper.GetString("Etcd.Address"), Config.Viper.GetInt("Etcd.Port"))
 	r, err := etcd.NewEtcdResolver([]string{EtcdAddress})
 	if err != nil {
@@ -35,7 +35,7 @@ func initUserRpc(Config *ttviper.Config) {
 	)
 	defer p.Shutdown(context.Background())
 
-	c, err := usersrv.NewClient(
+	c, err := favoritesrv.NewClient(
 		ServiceName,
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
@@ -51,11 +51,11 @@ func initUserRpc(Config *ttviper.Config) {
 	if err != nil {
 		panic(err)
 	}
-	userClient = c
+	favoriteClient = c
 }
 
-func Register(ctx context.Context, req *user.DouyinUserRegisterRequest) (resp *user.DouyinUserRegisterResponse, err error) {
-	resp, err = userClient.Register(ctx, req)
+func FavoriteAction(ctx context.Context, req *favorite.DouyinFavoriteActionRequest) (resp *favorite.DouyinFavoriteActionResponse, err error) {
+	resp, err = favoriteClient.FavoriteAction(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -65,19 +65,8 @@ func Register(ctx context.Context, req *user.DouyinUserRegisterRequest) (resp *u
 	return resp, nil
 }
 
-func Login(ctx context.Context, req *user.DouyinUserRegisterRequest) (resp *user.DouyinUserRegisterResponse, err error) {
-	resp, err = userClient.Login(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	if resp.StatusCode != 0 {
-		return nil, errno.NewErrNo(int(resp.StatusCode), *resp.StatusMsg)
-	}
-	return resp, nil
-}
-
-func GetUserById(ctx context.Context, req *user.DouyinUserRequest) (resp *user.DouyinUserResponse, err error) {
-	resp, err = userClient.GetUserById(ctx, req)
+func FavoriteList(ctx context.Context, req *favorite.DouyinFavoriteListRequest) (resp *favorite.DouyinFavoriteListResponse, err error) {
+	resp, err = favoriteClient.FavoriteList(ctx, req)
 	if err != nil {
 		return nil, err
 	}
