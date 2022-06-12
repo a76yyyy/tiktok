@@ -6,6 +6,7 @@ import (
 	"net"
 
 	"github.com/cloudwego/kitex/pkg/klog"
+	"moul.io/zapgorm2"
 
 	etcd "github.com/a76yyyy/registry-etcd"
 	"github.com/a76yyyy/tiktok/dal"
@@ -32,7 +33,7 @@ var (
 )
 
 func Init() {
-	dal.Init(&Config)
+	dal.Init()
 	Jwt = jwt.NewJWT([]byte(Config.Viper.GetString("JWT.signingKey")))
 }
 
@@ -40,12 +41,12 @@ func main() {
 	var logger dlog.ZapLogger = dlog.ZapLogger{
 		Level: klog.LevelInfo,
 	}
-
-	logger.SugaredLogger.Base = Config.InitLogger()
+	zaplogger := zapgorm2.New(dlog.InitLog())
+	logger.SugaredLogger.Base = &zaplogger
 
 	klog.SetLogger(&logger)
 
-	defer logger.SugaredLogger.Base.Sync()
+	defer logger.SugaredLogger.Base.ZapLogger.Sync()
 
 	r, err := etcd.NewEtcdRegistry([]string{EtcdAddress})
 	if err != nil {
