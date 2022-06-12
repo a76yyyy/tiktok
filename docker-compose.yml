@@ -1,5 +1,20 @@
 version: '3'
 
+x-minio-common: &minio-common
+  image: quay.io/minio/minio:latest
+  command: server --console-address ":9001" http://minio{1...4}/data{1...2}
+  expose:
+    - "9000"
+    - "9001"
+  environment:
+    MINIO_ROOT_USER: tiktokMinio
+    MINIO_ROOT_PASSWORD: tiktokMinio
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+    interval: 30s
+    timeout: 20s
+    retries: 3
+
 services:
   mysql:
     image: 'mysql:latest'
@@ -10,6 +25,7 @@ services:
       - MYSQL_USER=tiktok
       - MYSQL_PASSWORD=password
       - MYSQL_RANDOM_ROOT_PASSWORD="yes"
+
   Etcd:
     image: 'bitnami/etcd:latest'
     environment:
@@ -69,3 +85,62 @@ services:
       - GF_AUTH_DISABLE_LOGIN_FORM=true
     ports:
       - "3000:3000"
+
+  # starts 4 docker containers running minio server instances.
+  # using nginx reverse proxy, load balancing, you can access
+  # it through port 9000.
+  minio1:
+    <<: *minio-common
+    hostname: minio1
+    volumes:
+      - ./data/data1-1:/data1
+      - ./data/data1-2:/data2
+
+  minio2:
+    <<: *minio-common
+    hostname: minio2
+    volumes:
+      - ./data/data2-1:/data1
+      - ./data/data2-2:/data2
+
+  minio3:
+    <<: *minio-common
+    hostname: minio3
+    volumes:
+      - ./data/data3-1:/data1
+      - ./data/data3-2:/data2
+
+  minio4:
+    <<: *minio-common
+    hostname: minio4
+    volumes:
+      - ./data/data4-1:/data1
+      - ./data/data4-2:/data2
+
+  nginx:
+    image: nginx:alpine
+    hostname: nginx
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./log/nginx:/var/log/nginx:rw
+      - ./data/cache/nginx:/usr/local/nginx/conf/cache:rw
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    depends_on:
+      - minio1
+      - minio2
+      - minio3
+      - minio4
+
+# ## By default this config uses default local driver,
+# ## For custom volumes replace with volume driver configuration.
+# volumes:
+#   data1-1:
+#   data1-2:
+#   data2-1:
+#   data2-2:
+#   data3-1:
+#   data3-2:
+#   data4-1:
+#   data4-2:

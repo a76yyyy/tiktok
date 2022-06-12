@@ -1,0 +1,24 @@
+Global:
+  Source: "config(local)"
+  ChangeMe: "v3"
+
+Log:
+  level: "info"
+  development: false
+  encoding: "console" # console or json
+  encoderConfig:
+    #  # https://godoc.org/go.uber.org/zap/zapcore#EncoderConfig
+    timeKey: "ts"
+    nameKey: "TikTokLogger"
+    messageKey: "msg"
+    levelKey: "level"
+    #  levelEncoder: "lowercase"
+    callerKey: "caller"
+  #  StacktraceKey: "stacktrace"
+  outputPaths:
+    - "stdout"
+    - "/tmp/Tiktok.log"
+  #errorOutputPaths:
+  #  - "stderr"
+  #initialFields:
+  #  foo: "bar"

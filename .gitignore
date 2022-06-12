@@ -1,6 +1,7 @@
 .lh
 output/
 .vscode/
+data/
 
 *.log
 

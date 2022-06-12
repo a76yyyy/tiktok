@@ -1,0 +1,10 @@
+Global:
+  Source: "config(local)"
+  ChangeMe: "v3"
+
+Minio:
+  Endpoint: 192.168.123.12:9000
+  AccessKeyId: tiktokMinio
+  SecretAccessKey: tiktokMinio
+  UseSSL: false
+  VideoBucketName : tiktok-video

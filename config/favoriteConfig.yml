@@ -10,9 +10,9 @@ Etcd:
   Port: 2379
 
 Server:
-  Name: "TiktokFeedServer"
+  Name: "TiktokFavoriteServer"
   Address: "127.0.0.1"
-  Port: 8083
+  Port: 8085
 
 Client:
   Echo: true
@@ -20,13 +20,3 @@ Client:
   Servers:
     - "127.0.0.1"
     - "192.168.1.1"
-
-MySQL:
-  Host: "127.0.0.1"
-  Port: 8091
-  User: "tiktok"
-  Password: "password"
-  DBName: "Tiktok"
-  CharSet: "utf8mb4"
-  ParseTime: true
-  loc: "Local"
