@@ -37,6 +37,7 @@ func NewRelation(ctx context.Context, uid int64, tid int64) error {
 		if err != nil {
 			return err
 		}
+
 		//2.改变 user 表中的 following count
 		res := tx.Model(new(User)).Where("ID = ?", uid).Update("following_count", gorm.Expr("following_count + ?", 1))
 		if res.Error != nil {
@@ -99,7 +100,7 @@ func DisRelation(ctx context.Context, uid int64, tid int64) error {
 
 func FollowingList(ctx context.Context, uid int64) ([]*Relation, error) {
 	var RelationList []*Relation
-	err := DB.WithContext(ctx).Model(&Relation{}).Where("user_id = ?", uid).Find(&RelationList).Error
+	err := DB.WithContext(ctx).Where("user_id = ?", uid).Find(&RelationList).Error
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +109,7 @@ func FollowingList(ctx context.Context, uid int64) ([]*Relation, error) {
 
 func FollowerList(ctx context.Context, tid int64) ([]*Relation, error) {
 	var RelationList []*Relation
-	err := DB.WithContext(ctx).Model(&Relation{}).Where("to_user_id = ?", tid).Find(&RelationList).Error
+	err := DB.WithContext(ctx).Where("to_user_id = ?", tid).Find(&RelationList).Error
 	if err != nil {
 		return nil, err
 	}
