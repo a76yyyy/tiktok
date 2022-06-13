@@ -13,7 +13,7 @@ func Comments(vs []*db.Comment) ([]*comment.Comment, error) {
 			Id:         int64(v.ID),
 			User:       User(&v.User),
 			Content:    v.Content,
-			CreateDate: v.CreatedAt.Format("MM-DD"),
+			CreateDate: v.CreatedAt.Format("01-02"),
 		})
 	}
 	return comments, nil
