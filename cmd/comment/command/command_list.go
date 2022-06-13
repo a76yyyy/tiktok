@@ -3,8 +3,8 @@ package command
 import (
 	"context"
 
+	"github.com/a76yyyy/tiktok/dal/pack"
 	"github.com/a76yyyy/tiktok/kitex_gen/comment"
-	"github.com/a76yyyy/tiktok/pack"
 
 	"github.com/a76yyyy/tiktok/dal/db"
 )

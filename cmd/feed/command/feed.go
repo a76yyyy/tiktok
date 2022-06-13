@@ -5,7 +5,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/a76yyyy/tiktok/pack"
+	"github.com/a76yyyy/tiktok/dal/pack"
 
 	"github.com/a76yyyy/tiktok/kitex_gen/feed"
 

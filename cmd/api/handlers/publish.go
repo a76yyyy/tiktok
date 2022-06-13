@@ -8,8 +8,8 @@ import (
 
 	"github.com/a76yyyy/tiktok/pkg/errno"
 
+	"github.com/a76yyyy/tiktok/dal/pack"
 	"github.com/a76yyyy/tiktok/kitex_gen/publish"
-	"github.com/a76yyyy/tiktok/pack"
 
 	"github.com/a76yyyy/tiktok/cmd/api/rpc"
 

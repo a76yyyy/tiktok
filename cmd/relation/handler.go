@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/a76yyyy/tiktok/cmd/relation/command"
+	"github.com/a76yyyy/tiktok/dal/pack"
 	"github.com/a76yyyy/tiktok/kitex_gen/relation"
-	"github.com/a76yyyy/tiktok/pack"
 	"github.com/a76yyyy/tiktok/pkg/errno"
 )
 

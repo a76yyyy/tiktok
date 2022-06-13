@@ -6,7 +6,7 @@ import (
 	"github.com/a76yyyy/tiktok/kitex_gen/user"
 
 	"github.com/a76yyyy/tiktok/dal/db"
-	"github.com/a76yyyy/tiktok/pack"
+	"github.com/a76yyyy/tiktok/dal/pack"
 )
 
 type MGetUserService struct {
