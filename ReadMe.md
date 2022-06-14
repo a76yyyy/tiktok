@@ -81,7 +81,7 @@
 
     ``` Shell
     # 自行安装 docker 及 docker-compose
-    docker-compose up -d |
+    docker-compose up -d 
     ```
 
 3. 运行 user 服务
@@ -89,7 +89,7 @@
     ``` Shell
     cd cmd/user
     sh build.sh
-    sh output/bootstrap.sh |
+    sh output/bootstrap.sh 
     ```
 
 4. 运行 comment 服务
@@ -97,7 +97,7 @@
     ``` Shell
     cd cmd/comment
     sh build.sh
-    sh output/bootstrap.sh |
+    sh output/bootstrap.sh 
     ```
 
 5. 运行 favorite 服务
@@ -105,7 +105,7 @@
     ``` Shell
     cd cmd/favorite
     sh build.sh
-    sh output/bootstrap.sh |
+    sh output/bootstrap.sh 
     ```
 
 6. 运行 feed 服务
@@ -113,7 +113,7 @@
     ``` Shell
     cd cmd/feed
     sh build.sh
-    sh output/bootstrap.sh |
+    sh output/bootstrap.sh 
     ```
 
 7. 运行 publish 服务
@@ -121,7 +121,7 @@
     ``` Shell
     cd cmd/publish
     sh build.sh
-    sh output/bootstrap.sh |
+    sh output/bootstrap.sh 
     ```
 
 8. 运行 relation 服务
@@ -129,7 +129,7 @@
     ``` Shell
     cd cmd/relation
     sh build.sh
-    sh output/bootstrap.sh |
+    sh output/bootstrap.sh 
     ```
 
 9. 运行 api 服务
@@ -137,7 +137,7 @@
     ``` Shell
     cd cmd/api
     chmod +x ./run.sh
-    sh ./run.sh |
+    sh ./run.sh 
     ```
 
 
