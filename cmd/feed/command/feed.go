@@ -26,7 +26,7 @@ func NewGetUserFeedService(ctx context.Context) *GetUserFeedService {
 }
 
 // GetUserFeed get feed info.
-func (s *GetUserFeedService) GetUserFeed(req *feed.DouyinFeedRequest, uid int64) (vis []*feed.Video, nextTime int64, err error) {
+func (s *GetUserFeedService) GetUserFeed(req *feed.DouyinFeedRequest, fromID int64) (vis []*feed.Video, nextTime int64, err error) {
 	videos, err := db.MGetVideos(s.ctx, LIMIT, req.LatestTime)
 	if err != nil {
 		return vis, nextTime, err
@@ -36,7 +36,7 @@ func (s *GetUserFeedService) GetUserFeed(req *feed.DouyinFeedRequest, uid int64)
 		return vis, nextTime, nil
 	}
 
-	if vis, err = pack.Videos(s.ctx, videos, &uid); err != nil {
+	if vis, err = pack.Videos(s.ctx, videos, &fromID); err != nil {
 		return vis, nextTime, nil
 	}
 

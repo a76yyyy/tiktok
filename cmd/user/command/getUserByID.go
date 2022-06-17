@@ -19,10 +19,15 @@ func NewMGetUserService(ctx context.Context) *MGetUserService {
 }
 
 // MGetUser multiple get list of user info
-func (s *MGetUserService) MGetUser(req *user.DouyinUserRequest) (*user.User, error) {
+func (s *MGetUserService) MGetUser(req *user.DouyinUserRequest, fromID int64) (*user.User, error) {
 	modelUser, err := db.MGetUser(s.ctx, req.UserId)
 	if err != nil {
 		return nil, err
 	}
-	return pack.User(modelUser), nil
+
+	user, err := pack.User(s.ctx, modelUser, fromID)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }

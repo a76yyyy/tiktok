@@ -9,13 +9,16 @@ import (
 )
 
 // Video pack feed info
-func Video(ctx context.Context, v *db.Video, uid int64) *feed.Video {
+func Video(ctx context.Context, v *db.Video, fromID int64) (*feed.Video, error) {
 	if v == nil {
-		return nil
+		return nil, nil
 	}
-	user, _ := db.MGetUser(ctx, uid)
+	user, _ := db.MGetUser(ctx, int64(v.AuthorID))
 
-	author := User(user)
+	author, err := User(ctx, user, fromID)
+	if err != nil {
+		return nil, err
+	}
 	favorite_count := int64(v.FavoriteCount)
 	comment_count := int64(v.CommentCount)
 
@@ -27,17 +30,22 @@ func Video(ctx context.Context, v *db.Video, uid int64) *feed.Video {
 		FavoriteCount: favorite_count,
 		CommentCount:  comment_count,
 		Title:         v.Title,
-	}
+	}, nil
 }
 
 // Videos pack list of video info
-func Videos(ctx context.Context, vs []*db.Video, uid *int64) ([]*feed.Video, error) {
+func Videos(ctx context.Context, vs []*db.Video, fromID *int64) ([]*feed.Video, error) {
 	videos := make([]*feed.Video, 0)
 	for _, v := range vs {
-		if video2 := Video(ctx, v, int64(v.AuthorID)); video2 != nil {
+		video2, err := Video(ctx, v, *fromID)
+		if err != nil {
+			return nil, err
+		}
+
+		if video2 != nil {
 			flag := false
-			if *uid != 0 {
-				if result, err := db.GetFavoriteRelation(ctx, *uid, int64(v.ID)); err != nil {
+			if *fromID != 0 {
+				if result, err := db.GetFavoriteRelation(ctx, *fromID, int64(v.ID)); err != nil {
 					flag = false
 				} else if result.VideoID > 0 {
 					flag = true

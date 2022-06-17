@@ -16,29 +16,52 @@
 package pack
 
 import (
+	"context"
+
 	"github.com/a76yyyy/tiktok/kitex_gen/user"
 
 	"github.com/a76yyyy/tiktok/dal/db"
 )
 
 // User pack user info
-func User(u *db.User) *user.User {
+func User(ctx context.Context, u *db.User, fromID int64) (*user.User, error) {
 	if u == nil {
-		return nil
+		return nil, nil
 	}
 
 	follow_count := int64(u.FollowerCount)
 	follower_count := int64(u.FollowerCount)
-	return &user.User{Id: int64(u.ID), Name: u.UserName, FollowCount: &follow_count, FollowerCount: &follower_count}
+
+	relation, err := db.GetRelation(ctx, fromID, int64(u.ID))
+	if err != nil {
+		return nil, err
+	}
+
+	isFollow := false
+	if relation != nil {
+		isFollow = true
+	}
+	return &user.User{
+		Id:            int64(u.ID),
+		Name:          u.UserName,
+		FollowCount:   &follow_count,
+		FollowerCount: &follower_count,
+		IsFollow:      isFollow,
+	}, nil
 }
 
 // Users pack list of user info
-func Users(us []*db.User) []*user.User {
+func Users(ctx context.Context, us []*db.User, fromID int64) ([]*user.User, error) {
 	users := make([]*user.User, 0)
 	for _, u := range us {
-		if user2 := User(u); user2 != nil {
+		user2, err := User(ctx, u, fromID)
+		if err != nil {
+			return nil, err
+		}
+
+		if user2 != nil {
 			users = append(users, user2)
 		}
 	}
-	return users
+	return users, nil
 }

@@ -49,7 +49,7 @@ func (s *RelationSrvImpl) RelationFollowList(ctx context.Context, req *relation.
 		req.UserId = claim.Id // 没有传入UserID，默认为自己
 	}
 
-	users, err := command.NewFollowingListService(ctx).FollowingList(req)
+	users, err := command.NewFollowingListService(ctx).FollowingList(req, claim.Id)
 	if err != nil {
 		resp = pack.BuildFollowingListResp(err)
 		return resp, nil
@@ -72,7 +72,7 @@ func (s *RelationSrvImpl) RelationFollowerList(ctx context.Context, req *relatio
 		req.UserId = claim.Id // 没有传入UserID，默认为自己
 	}
 
-	users, err := command.NewFollowerListService(ctx).FollowerList(req)
+	users, err := command.NewFollowerListService(ctx).FollowerList(req, claim.Id)
 	if err != nil {
 		resp = pack.BuildFollowerListResp(err)
 		return resp, nil

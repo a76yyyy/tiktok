@@ -91,7 +91,7 @@ func (s *UserSrvImpl) GetUserById(ctx context.Context, req *user.DouyinUserReque
 		return resp, nil
 	}
 
-	user, err := command.NewMGetUserService(ctx).MGetUser(req)
+	user, err := command.NewMGetUserService(ctx).MGetUser(req, claim.Id)
 	if err != nil {
 		resp = pack.BuilduserUserResp(err)
 		return resp, nil

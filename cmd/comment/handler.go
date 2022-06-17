@@ -50,7 +50,7 @@ func (s *CommentSrvImpl) CommentList(ctx context.Context, req *comment.DouyinCom
 		resp = pack.BuildCommentListResp(errno.ErrBind)
 	}
 
-	comments, err := command.NewCommentListService(ctx).CommentList(req)
+	comments, err := command.NewCommentListService(ctx).CommentList(req, claim.Id)
 	if err != nil {
 		resp = pack.BuildCommentListResp(err)
 		return resp, nil

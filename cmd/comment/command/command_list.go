@@ -19,13 +19,13 @@ func NewCommentListService(ctx context.Context) *CommentListService {
 	}
 }
 
-func (s *CommentListService) CommentList(req *comment.DouyinCommentListRequest) ([]*comment.Comment, error) {
+func (s *CommentListService) CommentList(req *comment.DouyinCommentListRequest, fromID int64) ([]*comment.Comment, error) {
 	Comments, err := db.GetVideoComments(s.ctx, req.VideoId)
 	if err != nil {
 		return nil, err
 	}
 
-	comments, err := pack.Comments(Comments)
+	comments, err := pack.Comments(s.ctx, Comments, fromID)
 	if err != nil {
 		return nil, err
 	}
