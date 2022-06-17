@@ -2,8 +2,10 @@ package command
 
 import (
 	"context"
+	"errors"
 
 	"github.com/a76yyyy/tiktok/kitex_gen/user"
+	"gorm.io/gorm"
 
 	"github.com/a76yyyy/tiktok/dal/db"
 	"github.com/a76yyyy/tiktok/dal/pack"
@@ -18,10 +20,10 @@ func NewMGetUserService(ctx context.Context) *MGetUserService {
 	return &MGetUserService{ctx: ctx}
 }
 
-// MGetUser multiple get list of user info
+// MGetUser get user info by userID
 func (s *MGetUserService) MGetUser(req *user.DouyinUserRequest, fromID int64) (*user.User, error) {
-	modelUser, err := db.MGetUser(s.ctx, req.UserId)
-	if err != nil {
+	modelUser, err := db.GetUserByID(s.ctx, req.UserId)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
 

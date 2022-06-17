@@ -2,8 +2,10 @@ package pack
 
 import (
 	"context"
+	"errors"
 
 	"github.com/a76yyyy/tiktok/kitex_gen/comment"
+	"gorm.io/gorm"
 
 	"github.com/a76yyyy/tiktok/dal/db"
 )
@@ -11,8 +13,8 @@ import (
 func Comments(ctx context.Context, vs []*db.Comment, fromID int64) ([]*comment.Comment, error) {
 	comments := make([]*comment.Comment, 0)
 	for _, v := range vs {
-		user, err := db.MGetUser(ctx, int64(v.UserID))
-		if err != nil {
+		user, err := db.GetUserByID(ctx, int64(v.UserID))
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, err
 		}
 

@@ -28,7 +28,7 @@ func GetFavoriteRelation(ctx context.Context, uid int64, vid int64) (*FavoriteRe
 	video := new(FavoriteRelation)
 
 	if err := DB.WithContext(ctx).Where("user_id = ? and video_id = ?", uid, vid).First(&video).Error; err != nil {
-		return video, err
+		return nil, err
 	}
 	return video, nil
 }

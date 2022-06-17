@@ -2,8 +2,10 @@ package pack
 
 import (
 	"context"
+	"errors"
 
 	"github.com/a76yyyy/tiktok/kitex_gen/user"
+	"gorm.io/gorm"
 
 	"github.com/a76yyyy/tiktok/dal/db"
 )
@@ -11,8 +13,8 @@ import (
 func FollowingList(ctx context.Context, vs []*db.Relation, fromID int64) ([]*user.User, error) {
 	users := make([]*db.User, 0)
 	for _, v := range vs {
-		user2, err := db.MGetUser(ctx, int64(v.ToUserID))
-		if err != nil {
+		user2, err := db.GetUserByID(ctx, int64(v.ToUserID))
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, err
 		}
 		users = append(users, user2)
@@ -24,8 +26,8 @@ func FollowingList(ctx context.Context, vs []*db.Relation, fromID int64) ([]*use
 func FollowerList(ctx context.Context, vs []*db.Relation, fromID int64) ([]*user.User, error) {
 	users := make([]*db.User, 0)
 	for _, v := range vs {
-		user2, err := db.MGetUser(ctx, int64(v.UserID))
-		if err != nil {
+		user2, err := db.GetUserByID(ctx, int64(v.UserID))
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, err
 		}
 		users = append(users, user2)

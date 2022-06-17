@@ -2,8 +2,10 @@ package pack
 
 import (
 	"context"
+	"errors"
 
 	"github.com/a76yyyy/tiktok/kitex_gen/feed"
+	"gorm.io/gorm"
 
 	"github.com/a76yyyy/tiktok/dal/db"
 )
@@ -13,7 +15,10 @@ func Video(ctx context.Context, v *db.Video, fromID int64) (*feed.Video, error) 
 	if v == nil {
 		return nil, nil
 	}
-	user, _ := db.MGetUser(ctx, int64(v.AuthorID))
+	user, err := db.GetUserByID(ctx, int64(v.AuthorID))
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
 
 	author, err := User(ctx, user, fromID)
 	if err != nil {
@@ -45,14 +50,14 @@ func Videos(ctx context.Context, vs []*db.Video, fromID *int64) ([]*feed.Video, 
 		if video2 != nil {
 			flag := false
 			if *fromID != 0 {
-				if result, err := db.GetFavoriteRelation(ctx, *fromID, int64(v.ID)); err != nil {
-					flag = false
-				} else if result.VideoID > 0 {
-					flag = true
-				} else {
-					flag = false
+				results, err := db.GetFavoriteRelation(ctx, *fromID, int64(v.ID))
+				if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+					return nil, err
 				}
 
+				if results != nil {
+					flag = true
+				}
 			}
 			video2.IsFavorite = flag
 			videos = append(videos, video2)

@@ -17,8 +17,10 @@ package pack
 
 import (
 	"context"
+	"errors"
 
 	"github.com/a76yyyy/tiktok/kitex_gen/user"
+	"gorm.io/gorm"
 
 	"github.com/a76yyyy/tiktok/dal/db"
 )
@@ -26,18 +28,20 @@ import (
 // User pack user info
 func User(ctx context.Context, u *db.User, fromID int64) (*user.User, error) {
 	if u == nil {
-		return nil, nil
+		return &user.User{
+			Name: "已注销用户",
+		}, nil
 	}
 
 	follow_count := int64(u.FollowerCount)
 	follower_count := int64(u.FollowerCount)
 
+	isFollow := false
 	relation, err := db.GetRelation(ctx, fromID, int64(u.ID))
-	if err != nil {
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
 
-	isFollow := false
 	if relation != nil {
 		isFollow = true
 	}

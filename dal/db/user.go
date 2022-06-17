@@ -46,8 +46,8 @@ func MGetUsers(ctx context.Context, userIDs []int64) ([]*User, error) {
 	return res, nil
 }
 
-// MGetUsers multiple get list of user info
-func MGetUser(ctx context.Context, userID int64) (*User, error) {
+// GetUserByID multiple get list of user info
+func GetUserByID(ctx context.Context, userID int64) (*User, error) {
 	res := new(User)
 
 	if err := DB.WithContext(ctx).First(&res, userID).Error; err != nil {
