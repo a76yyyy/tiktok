@@ -3,8 +3,10 @@ package command
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"image"
 	"image/jpeg"
+	"os"
 	"strings"
 
 	"github.com/a76yyyy/tiktok/kitex_gen/publish"
@@ -14,9 +16,6 @@ import (
 	"github.com/a76yyyy/tiktok/dal/db"
 
 	"github.com/gofrs/uuid"
-
-	"fmt"
-	"os"
 
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
@@ -70,7 +69,7 @@ func (s *PublishActionService) PublishAction(req *publish.DouyinPublishActionReq
 	}
 
 	// 上传封面
-	coverReader := bytes.NewReader(videoData)
+	coverReader := bytes.NewReader(coverData)
 	err = minio.UploadFile(MinioVideoBucketName, coverPath, coverReader, int64(len(coverData)))
 	if err != nil {
 		return err
@@ -98,9 +97,9 @@ func (s *PublishActionService) PublishAction(req *publish.DouyinPublishActionReq
 
 // ReadFrameAsJpeg
 // 从视频流中截取一帧并返回 需要在本地环境中安装ffmpeg并将bin添加到环境变量
-func readFrameAsJpeg(inFileName string) ([]byte, error) {
+func readFrameAsJpeg(filePath string) ([]byte, error) {
 	reader := bytes.NewBuffer(nil)
-	err := ffmpeg.Input(inFileName).
+	err := ffmpeg.Input(filePath).
 		Filter("select", ffmpeg.Args{fmt.Sprintf("gte(n,%d)", 1)}).
 		Output("pipe:", ffmpeg.KwArgs{"vframes": 1, "format": "image2", "vcodec": "mjpeg"}).
 		WithOutput(reader, os.Stdout).
@@ -112,10 +111,9 @@ func readFrameAsJpeg(inFileName string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	buf := new(bytes.Buffer)
-	err = jpeg.Encode(buf, img, nil)
-	if err != nil {
-		return nil, err
-	}
-	return buf.Bytes(), nil
+	jpeg.Encode(buf, img, nil)
+
+	return buf.Bytes(), err
 }
