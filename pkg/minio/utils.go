@@ -1,3 +1,11 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 10:00:59
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:57:08
+ * @FilePath: /tiktok/pkg/minio/utils.go
+ * @Description: Minio 对象存储业务逻辑
+ */
 package minio
 
 import (
@@ -10,7 +18,7 @@ import (
 	"github.com/minio/minio-go/v7"
 )
 
-// 创建桶
+// CreateBucket 创建桶
 func CreateBucket(bucketName string) error {
 	if len(bucketName) <= 0 {
 		klog.Error("bucketName invalid")
@@ -34,7 +42,7 @@ func CreateBucket(bucketName string) error {
 	return nil
 }
 
-// 上传本地文件（提供文件路径）
+// UploadLocalFile 上传本地文件（提供文件路径）至 minio
 func UploadLocalFile(bucketName string, objectName string, filePath string, contentType string) (int64, error) {
 	ctx := context.Background()
 	info, err := minioClient.FPutObject(ctx, bucketName, objectName, filePath, minio.PutObjectOptions{
@@ -48,7 +56,7 @@ func UploadLocalFile(bucketName string, objectName string, filePath string, cont
 	return info.Size, nil
 }
 
-// 上传文件（提供reader）
+// UploadFile 上传文件（提供reader）至 minio
 func UploadFile(bucketName string, objectName string, reader io.Reader, objectsize int64) error {
 	ctx := context.Background()
 	n, err := minioClient.PutObject(ctx, bucketName, objectName, reader, objectsize, minio.PutObjectOptions{
@@ -62,6 +70,7 @@ func UploadFile(bucketName string, objectName string, reader io.Reader, objectsi
 	return nil
 }
 
+// GetFileUrl 从 minio 获取文件Url
 func GetFileUrl(bucketName string, fileName string, expires time.Duration) (*url.URL, error) {
 	ctx := context.Background()
 	reqParams := make(url.Values)

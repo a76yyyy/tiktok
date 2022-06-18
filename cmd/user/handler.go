@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-10 14:47:34
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:01:30
+ * @FilePath: /tiktok/cmd/user/handler.go
+ * @Description: 定义 User RPC Server 端的相关接口
+ */
+
 package main
 
 import (

@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 00:00:46
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:23:01
+ * @FilePath: /tiktok/cmd/publish/main.go
+ * @Description: Publish RPC Server 端初始化
+ */
+
 package main
 
 import (
@@ -32,11 +41,13 @@ var (
 	Jwt         *jwt.JWT
 )
 
+// Publish RPC Server 端配置初始化
 func Init() {
 	dal.Init()
 	Jwt = jwt.NewJWT([]byte(Config.Viper.GetString("JWT.signingKey")))
 }
 
+// Publish RPC Server 端运行
 func main() {
 	var logger dlog.ZapLogger = dlog.ZapLogger{
 		Level: klog.LevelInfo,

@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 18:41:14
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:46:46
+ * @FilePath: /tiktok/dal/pack/relation.go
+ * @Description: 封装 Relation 数据库数据为 RPC Server 端响应
+ */
+
 package pack
 
 import (
@@ -10,6 +19,7 @@ import (
 	"github.com/a76yyyy/tiktok/dal/db"
 )
 
+// FollowingList pack lists of following info.
 func FollowingList(ctx context.Context, vs []*db.Relation, fromID int64) ([]*user.User, error) {
 	users := make([]*db.User, 0)
 	for _, v := range vs {
@@ -23,6 +33,7 @@ func FollowingList(ctx context.Context, vs []*db.Relation, fromID int64) ([]*use
 	return Users(ctx, users, fromID)
 }
 
+// FollowerList pack lists of follower info.
 func FollowerList(ctx context.Context, vs []*db.Relation, fromID int64) ([]*user.User, error) {
 	users := make([]*db.User, 0)
 	for _, v := range vs {

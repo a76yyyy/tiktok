@@ -1,17 +1,11 @@
-// Copyright 2021 CloudWeGo Authors
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-11 10:10:05
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-18 23:33:49
+ * @FilePath: /tiktok/cmd/api/handlers/user.go
+ * @Description: 定义 User API 的 handler
+ */
 
 package handlers
 
@@ -29,7 +23,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Register register user info
+// 传递 注册用户操作 的上下文至 User 服务的 RPC 客户端, 并获取相应的响应.
 func Register(c *gin.Context) {
 	var registerVar UserRegisterParam
 	registerVar.UserName = c.Query("username")
@@ -51,6 +45,7 @@ func Register(c *gin.Context) {
 	SendResponse(c, resp)
 }
 
+// 传递 注册用户登录操作 的上下文至 User 服务的 RPC 客户端, 并获取相应的响应.
 func Login(c *gin.Context) {
 	var registerVar UserRegisterParam
 	registerVar.UserName = c.Query("username")
@@ -72,6 +67,7 @@ func Login(c *gin.Context) {
 	SendResponse(c, resp)
 }
 
+// 传递 获取注册用户`UserID`操作 的上下文至 User 服务的 RPC 客户端, 并获取相应的响应.
 func GetUserById(c *gin.Context) {
 	var userVar UserParam
 	userid, err := strconv.Atoi(c.Query("user_id"))

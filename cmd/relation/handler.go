@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-11 23:52:53
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:01:03
+ * @FilePath: /tiktok/cmd/relation/handler.go
+ * @Description: 定义 Relation RPC Server 端的相关接口
+ */
+
 package main
 
 import (

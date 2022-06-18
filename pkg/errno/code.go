@@ -1,7 +1,18 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-08 16:23:30
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:49:39
+ * @FilePath: /tiktok/pkg/errno/code.go
+ * @Description: 错误码, 设计逻辑:https://github.com/a76yyyy/ErrnoCode
+ */
+
+// 错误码
 package errno
 
 import code "github.com/a76yyyy/ErrnoCode"
 
+// HTTP Error
 var (
 	HttpSuccess                  = NewHttpErr(code.ErrSuccess, 200, "OK")
 	ErrHttpUnknown               = NewHttpErr(code.ErrUnknown, 500, "Internal server error")
@@ -51,6 +62,7 @@ var (
 	ErrHttpIncompatibleVersion   = NewHttpErr(code.ErrIncompatibleVersion, 500, "Encoded hash is not in the correct format")
 )
 
+// Server Error
 var (
 	Success         = NewErrNo(code.ErrSuccess, "OK")
 	ErrUnknown      = NewErrNo(code.ErrUnknown, "Internal server error")

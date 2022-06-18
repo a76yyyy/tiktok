@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-11 17:00:41
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:36:08
+ * @FilePath: /tiktok/dal/db/feed.go
+ * @Description: Feed 数据库操作业务逻辑
+ */
+
 package db
 
 import (
@@ -7,6 +16,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Video Gorm Data Structures
 type Video struct {
 	gorm.Model
 	UpdatedAt     time.Time `gorm:"column:update_time;not null;index:idx_update" `

@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 22:40:31
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-18 23:44:05
+ * @FilePath: /tiktok/cmd/api/rpc/publish.go
+ * @Description: Publish RPC 客户端初始化及 相关 RPC 通信操作定义
+ */
+
 package rpc
 
 import (
@@ -20,6 +29,7 @@ import (
 
 var publishClient publishsrv.Client
 
+// Publish RPC 客户端初始化
 func initPublishRpc(Config *ttviper.Config) {
 	EtcdAddress := fmt.Sprintf("%s:%d", Config.Viper.GetString("Etcd.Address"), Config.Viper.GetInt("Etcd.Port"))
 	r, err := etcd.NewEtcdResolver([]string{EtcdAddress})
@@ -54,6 +64,7 @@ func initPublishRpc(Config *ttviper.Config) {
 	publishClient = c
 }
 
+// 传递 发布视频操作 的上下文, 并获取 RPC Server 端的响应.
 func PublishAction(ctx context.Context, req *publish.DouyinPublishActionRequest) (resp *publish.DouyinPublishActionResponse, err error) {
 	resp, err = publishClient.PublishAction(ctx, req)
 	if err != nil {
@@ -65,6 +76,7 @@ func PublishAction(ctx context.Context, req *publish.DouyinPublishActionRequest)
 	return resp, nil
 }
 
+// 传递 获取用户发布视频列表操作 的上下文, 并获取 RPC Server 端的响应.
 func PublishList(ctx context.Context, req *publish.DouyinPublishListRequest) (resp *publish.DouyinPublishListResponse, err error) {
 	resp, err = publishClient.PublishList(ctx, req)
 	if err != nil {

@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-11 22:57:06
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:37:39
+ * @FilePath: /tiktok/dal/db/favorite.go
+ * @Description: Favorite 数据库操作业务逻辑
+ */
+
 package db
 
 import (
@@ -25,6 +34,7 @@ func GetFavoriteRelation(ctx context.Context, uid int64, vid int64) (*Video, err
 	return video, nil
 }
 
+// Favorite new favorite data.
 func Favorite(ctx context.Context, uid int64, vid int64) error {
 	err := DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		// 在事务中执行一些 db 操作（从这里开始，您应该使用 'tx' 而不是 'db'）
@@ -57,6 +67,7 @@ func Favorite(ctx context.Context, uid int64, vid int64) error {
 	return err
 }
 
+// DisFavorite deletes the specified favorite from the database
 func DisFavorite(ctx context.Context, uid int64, vid int64) error {
 	err := DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		// 在事务中执行一些 db 操作（从这里开始，您应该使用 'tx' 而不是 'db'）
@@ -91,6 +102,7 @@ func DisFavorite(ctx context.Context, uid int64, vid int64) error {
 	return err
 }
 
+// FavoriteList returns a list of Favorite videos.
 func FavoriteList(ctx context.Context, uid int64) ([]Video, error) {
 	user := new(User)
 	if err := DB.WithContext(ctx).First(user, uid).Error; err != nil {

@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-11 23:45:18
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-18 23:37:32
+ * @FilePath: /tiktok/cmd/api/rpc/feed.go
+ * @Description: Feed RPC 客户端初始化及 相关 RPC 通信操作定义
+ */
+
 package rpc
 
 import (
@@ -20,6 +29,7 @@ import (
 
 var feedClient feedsrv.Client
 
+// Feed RPC 客户端初始化
 func initFeedRpc(Config *ttviper.Config) {
 	EtcdAddress := fmt.Sprintf("%s:%d", Config.Viper.GetString("Etcd.Address"), Config.Viper.GetInt("Etcd.Port"))
 	r, err := etcd.NewEtcdResolver([]string{EtcdAddress})
@@ -54,6 +64,7 @@ func initFeedRpc(Config *ttviper.Config) {
 	feedClient = c
 }
 
+// 传递 获取视频流操作 的上下文, 并获取 RPC Server 端的响应.
 func GetUserFeed(ctx context.Context, req *feed.DouyinFeedRequest) (resp *feed.DouyinFeedResponse, err error) {
 	resp, err = feedClient.GetUserFeed(ctx, req)
 	if err != nil {

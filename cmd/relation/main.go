@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-11 23:52:53
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:22:50
+ * @FilePath: /tiktok/cmd/relation/main.go
+ * @Description: Relation RPC Server 端初始化
+ */
+
 package main
 
 import (
@@ -32,11 +41,13 @@ var (
 	Jwt         *jwt.JWT
 )
 
+// Relation RPC Server 端配置初始化
 func Init() {
 	dal.Init()
 	Jwt = jwt.NewJWT([]byte(Config.Viper.GetString("JWT.signingKey")))
 }
 
+// Relation RPC Server 端运行
 func main() {
 	var logger dlog.ZapLogger = dlog.ZapLogger{
 		Level: klog.LevelInfo,

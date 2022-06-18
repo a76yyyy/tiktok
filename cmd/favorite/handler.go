@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 00:02:35
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-18 23:58:11
+ * @FilePath: /tiktok/cmd/favorite/handler.go
+ * @Description: 定义 Favorite RPC Server 端的相关接口
+ */
+
 package main
 
 import (

@@ -143,12 +143,12 @@
 
 # 四、下一步计划
 
-1. 目前已采用 FFmpeg-go 获取到了视频的封面图片流，但是保存为图片后显示解码错误，等待调试解决
+1. 编写 DockerFile 实现分布式容器部署
 
-2. 编写 DockerFile 实现分布式容器部署
+2. 检查 自封装的 dlog 包中 callerSkip存在的问题
 
-3. 检查 自封装的 dlog 包中 callerSkip存在的问题
+3. 采用 Redis 作为 NoSQL 缓存，优化 JWT 鉴权，结合消息队列和 Redis 实现对定时更新 Token、各种操作数据 的缓存和持久性存储
 
-4. 采用 Redis 作为 NoSQL 缓存，优化 JWT 鉴权，结合消息队列和 Redis 实现对定时更新 Token、各种操作数据 的缓存和持久性存储
+4. 使用 Jaeger 实现链路跟踪可视化
 
-5. 使用 Jaeger 实现链路跟踪可视化
+5. 添加 RPC微服务 Handler 部分的单元测试内容

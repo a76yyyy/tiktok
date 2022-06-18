@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-10 14:47:34
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:22:35
+ * @FilePath: /tiktok/cmd/user/main.go
+ * @Description: User RPC Server 端初始化
+ */
+
 package main
 
 import (
@@ -34,6 +43,7 @@ var (
 	Argon2Config *command.Argon2Params
 )
 
+// User RPC Server 端配置初始化
 func Init() {
 	dal.Init()
 	Jwt = jwt.NewJWT([]byte(Config.Viper.GetString("JWT.signingKey")))
@@ -46,6 +56,7 @@ func Init() {
 	}
 }
 
+// User RPC Server 端运行
 func main() {
 	var logger dlog.ZapLogger = dlog.ZapLogger{
 		Level: klog.LevelInfo,

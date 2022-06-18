@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 10:00:59
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:54:49
+ * @FilePath: /tiktok/pkg/minio/init.go
+ * @Description: Minio 对象存储初始化
+ */
+
 package minio
 
 import (
@@ -17,6 +26,7 @@ var (
 	MinioVideoBucketName = Config.Viper.GetString("minio.VideoBucketName")
 )
 
+// Minio 对象存储初始化
 func init() {
 	client, err := minio.New(MinioEndpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(MinioAccessKeyId, MinioSecretAccessKey, ""),

@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 16:03:40
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-18 23:55:36
+ * @FilePath: /tiktok/cmd/favorite/command/favorite_action.go
+ * @Description: 点赞 操作业务逻辑
+ */
+
 package command
 
 import (

@@ -1,3 +1,13 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-11 22:33:13
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:48:00
+ * @FilePath: /tiktok/pkg/dlog/log.go
+ * @Description: 基于 klog 和 zap 封装的 Logger 及其接口
+ */
+
+// 基于 klog 和 zap 封装的 Logger 及其接口
 package dlog
 
 import (
@@ -14,8 +24,8 @@ var (
 	config = ttviper.ConfigInit("TIKTOK_LOG", "logConfig")
 )
 
+// Init Logger config
 func InitLog() *zap.Logger {
-
 	return config.InitLogger()
 }
 

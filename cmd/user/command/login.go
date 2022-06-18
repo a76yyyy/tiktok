@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-10 23:21:53
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:13:43
+ * @FilePath: /tiktok/cmd/user/command/login.go
+ * @Description: 登录 操作业务逻辑
+ */
+
 package command
 
 import (
@@ -36,9 +45,9 @@ func (s *CheckUserService) CheckUser(req *user.DouyinUserRegisterRequest) (int64
 	if len(users) == 0 {
 		return 0, errno.ErrUserNotFound
 	}
-	u := users[0]
+	user := users[0]
 
-	passWordMatch, err := comparePasswordAndHash(req.Password, u.Password)
+	passWordMatch, err := comparePasswordAndHash(req.Password, user.Password)
 	if err != nil {
 		return 0, err
 	}
@@ -46,9 +55,10 @@ func (s *CheckUserService) CheckUser(req *user.DouyinUserRegisterRequest) (int64
 	if !passWordMatch {
 		return 0, errno.ErrPasswordIncorrect
 	}
-	return int64(u.ID), nil
+	return int64(user.ID), nil
 }
 
+// comparePasswordAndHash compares the password and hash of the given password.
 func comparePasswordAndHash(password, encodedHash string) (match bool, err error) {
 	// Extract the parameters, salt and derived key from the encoded password
 	// hash.
@@ -69,6 +79,9 @@ func comparePasswordAndHash(password, encodedHash string) (match bool, err error
 	return false, nil
 }
 
+// decodeHash decode the hash of the password from the database.
+//
+// returns an error if the password is not valid.
 func decodeHash(encodedHash string) (argon2Params *Argon2Params, salt, hash []byte, err error) {
 	vals := strings.Split(encodedHash, "$")
 	if len(vals) != 6 {

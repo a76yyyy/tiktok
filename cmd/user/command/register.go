@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-10 19:39:14
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:17:32
+ * @FilePath: /tiktok/cmd/user/command/register.go
+ * @Description: 注册 操作业务逻辑
+ */
+
 package command
 
 import (
@@ -54,6 +63,8 @@ type Argon2Params struct {
 	KeyLength   uint32
 }
 
+// generateFromPassword generate the hash from the password string with salt and iterations values.
+// the encrypting algorithm is Argon2id.
 func generateFromPassword(password string, argon2Params *Argon2Params) (encodedHash string, err error) {
 	salt, err := generateRandomBytes(argon2Params.SaltLength)
 	if err != nil {
@@ -72,6 +83,7 @@ func generateFromPassword(password string, argon2Params *Argon2Params) (encodedH
 	return encodedHash, nil
 }
 
+// generateRandomBytes returns a random bytes.
 func generateRandomBytes(saltLength uint32) ([]byte, error) {
 	buf := make([]byte, saltLength)
 	_, err := rand.Read(buf)

@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 23:26:23
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-18 23:29:25
+ * @FilePath: /tiktok/cmd/api/handlers/comment.go
+ * @Description: 定义 Comment API 的 handler
+ */
+
 package handlers
 
 import (
@@ -14,6 +23,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// 传递 评论操作 的上下文至 Comment 服务的 RPC 客户端, 并获取相应的响应.
 func CommentAction(c *gin.Context) {
 	var paramVar CommentActionParam
 	token := c.Query("token")
@@ -63,6 +73,7 @@ func CommentAction(c *gin.Context) {
 	SendResponse(c, resp)
 }
 
+// 传递 获取评论列表操作 的上下文至 Comment 服务的 RPC 客户端, 并获取相应的响应.
 func CommentList(c *gin.Context) {
 	var paramVar CommentListParam
 	videoid, err := strconv.Atoi(c.Query("video_id"))

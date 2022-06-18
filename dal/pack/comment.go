@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 20:27:06
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:42:26
+ * @FilePath: /tiktok/dal/pack/comment.go
+ * @Description: 封装 Comments 数据库数据为 RPC Server 端响应
+ */
+
 package pack
 
 import (
@@ -10,6 +19,7 @@ import (
 	"github.com/a76yyyy/tiktok/dal/db"
 )
 
+// Comment pack Comments info.
 func Comments(ctx context.Context, vs []*db.Comment, fromID int64) ([]*comment.Comment, error) {
 	comments := make([]*comment.Comment, 0)
 	for _, v := range vs {

@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-11 16:59:09
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:00:05
+ * @FilePath: /tiktok/cmd/feed/handler.go
+ * @Description: 定义 Feed RPC Server 端的相关接口
+ */
+
 package main
 
 import (
@@ -38,7 +47,7 @@ func (s *FeedSrvImpl) GetUserFeed(ctx context.Context, req *feed.DouyinFeedReque
 }
 
 // GetVideoById implements the FeedSrvImpl interface.
+// Deprecated: Never Use GetVideoById
 func (s *FeedSrvImpl) GetVideoById(ctx context.Context, req *feed.VideoIdRequest) (resp *feed.Video, err error) {
-	// TODO: Your code here...
 	return
 }

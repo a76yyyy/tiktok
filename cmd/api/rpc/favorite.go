@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 23:10:06
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-18 23:35:48
+ * @FilePath: /tiktok/cmd/api/rpc/favorite.go
+ * @Description: Favorite RPC 客户端初始化及 相关 RPC 通信操作定义
+ */
+
 package rpc
 
 import (
@@ -20,6 +29,7 @@ import (
 
 var favoriteClient favoritesrv.Client
 
+//  Favorite RPC 客户端初始化
 func initFavoriteRpc(Config *ttviper.Config) {
 	EtcdAddress := fmt.Sprintf("%s:%d", Config.Viper.GetString("Etcd.Address"), Config.Viper.GetInt("Etcd.Port"))
 	r, err := etcd.NewEtcdResolver([]string{EtcdAddress})
@@ -54,6 +64,7 @@ func initFavoriteRpc(Config *ttviper.Config) {
 	favoriteClient = c
 }
 
+// 传递 点赞操作 的上下文, 并获取 RPC Server 端的响应.
 func FavoriteAction(ctx context.Context, req *favorite.DouyinFavoriteActionRequest) (resp *favorite.DouyinFavoriteActionResponse, err error) {
 	resp, err = favoriteClient.FavoriteAction(ctx, req)
 	if err != nil {
@@ -65,6 +76,7 @@ func FavoriteAction(ctx context.Context, req *favorite.DouyinFavoriteActionReque
 	return resp, nil
 }
 
+// 传递 获取点赞列表操作 的上下文, 并获取 RPC Server 端的响应.
 func FavoriteList(ctx context.Context, req *favorite.DouyinFavoriteListRequest) (resp *favorite.DouyinFavoriteListResponse, err error) {
 	resp, err = favoriteClient.FavoriteList(ctx, req)
 	if err != nil {

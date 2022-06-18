@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-10 14:55:36
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 01:02:53
+ * @FilePath: /tiktok/pkg/ttviper/config.go
+ * @Description: Viper 配置存取初始化及代码封装
+ */
+
 package ttviper
 
 import (
@@ -8,6 +17,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
@@ -15,6 +25,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+// Config
 type Config struct {
 	Viper *viper.Viper
 }
@@ -36,11 +47,13 @@ var (
 	另外一个原因是，plfag.String()返回的是*string，用起来没那么直观
 */
 
+// Viper 配置存取初始化
 func init() {
 	pflag.StringVar(&configVar, "config", "", "Config file path")
 	pflag.BoolVar(&isRemoteConfig, "isRemoteConfig", false, "Whether to choose remote config")
 }
 
+// SetRemoteConfig sets the config from remote.
 func (v *Config) SetRemoteConfig(u *url.URL) {
 	/*
 		这里接受etcd 或 consul 的url
@@ -99,12 +112,13 @@ func (v *Config) SetRemoteConfig(u *url.URL) {
 
 }
 
+// SetConfigType
 func (v *Config) SetDefaultValue() {
-
 	v.Viper.SetDefault("global.unset", "default(viper)")
 	/* add more */
 }
 
+// WatchRemoteConf watch the configuration of the remote provider and
 func (v *Config) WatchRemoteConf() {
 	for {
 		time.Sleep(time.Second * 5) // delay after each request
@@ -112,19 +126,20 @@ func (v *Config) WatchRemoteConf() {
 		// currently, only tested with etcd support
 		err := v.Viper.WatchRemoteConfig()
 		if err != nil {
-			fmt.Printf("unable to read remote config: %v\n", err)
+			klog.Errorf("unable to read remote config: %v\n", err)
 			continue
 		}
 
 		// unmarshal new config into our runtime config struct. you can also use channel
 		// to implement a signal to notify the system of the changes
 		//runtime_viper.Unmarshal(&runtime_conf)
-		fmt.Println("Watching Remote Config")
-		fmt.Printf("Global.Source: '%s'\n", v.Viper.GetString("Global.Source"))
-		fmt.Printf("Global.ChangeMe: '%s'\n", v.Viper.GetString("Global.ChangeMe"))
+		klog.Info("Watching Remote Config")
+		klog.Infof("Global.Source: '%s'\n", v.Viper.GetString("Global.Source"))
+		klog.Infof("Global.ChangeMe: '%s'\n", v.Viper.GetString("Global.ChangeMe"))
 	}
 }
 
+// ZapLogConfig
 func (v *Config) ZapLogConfig() []byte {
 	log := v.Viper.Sub("Log")
 	logConfig, err := json.Marshal(log.AllSettings())
@@ -134,6 +149,7 @@ func (v *Config) ZapLogConfig() []byte {
 	return logConfig
 }
 
+// InitLogger
 func (v *Config) InitLogger() *zap.Logger {
 	var cfg zap.Config
 	if err := json.Unmarshal(v.ZapLogConfig(), &cfg); err != nil {
@@ -153,6 +169,7 @@ func (v *Config) InitLogger() *zap.Logger {
 	return logger
 }
 
+// ConfigInit initializes the configuration
 func ConfigInit(envPrefix string, cfgName string) Config {
 	pflag.Parse()
 

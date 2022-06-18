@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-11 16:59:09
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:23:10
+ * @FilePath: /tiktok/cmd/feed/main.go
+ * @Description: Feed RPC Server 端初始化
+ */
+
 package main
 
 import (
@@ -32,11 +41,13 @@ var (
 	Jwt         *jwt.JWT
 )
 
+// Feed RPC Server 端配置初始化
 func Init() {
 	dal.Init()
 	Jwt = jwt.NewJWT([]byte(Config.Viper.GetString("JWT.signingKey")))
 }
 
+// Feed RPC Server 端运行
 func main() {
 	var logger dlog.ZapLogger = dlog.ZapLogger{
 		Level: klog.LevelInfo,

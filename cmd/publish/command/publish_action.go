@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 09:32:40
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:03:14
+ * @FilePath: /tiktok/cmd/publish/command/publish_action.go
+ * @Description: 发布视频 操作业务逻辑
+ */
+
 package command
 
 import (

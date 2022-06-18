@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-10 22:29:43
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:43:50
+ * @FilePath: /tiktok/dal/pack/resp.go
+ * @Description: 封装 RPC Server 端响应
+ */
+
 package pack
 
 import (

@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 18:11:50
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:30:44
+ * @FilePath: /tiktok/dal/db/relation.go
+ * @Description: Relation 数据库操作业务逻辑
+ */
+
 package db
 
 import (
@@ -7,6 +16,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Relation Gorm data structure
 type Relation struct {
 	gorm.Model
 	User     User `gorm:"foreignkey:UserID;"`
@@ -19,7 +29,7 @@ func (Relation) TableName() string {
 	return "relation"
 }
 
-// get relation info
+// GetRelation get relation info
 func GetRelation(ctx context.Context, uid int64, tid int64) (*Relation, error) {
 	relation := new(Relation)
 
@@ -29,6 +39,7 @@ func GetRelation(ctx context.Context, uid int64, tid int64) (*Relation, error) {
 	return relation, nil
 }
 
+// NewRelation creates a new Relation
 func NewRelation(ctx context.Context, uid int64, tid int64) error {
 	err := DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		// 在事务中执行一些 db 操作（从这里开始，您应该使用 'tx' 而不是 'db'）
@@ -63,6 +74,7 @@ func NewRelation(ctx context.Context, uid int64, tid int64) error {
 	return err
 }
 
+// DisRelation deletes a relation from the database.
 func DisRelation(ctx context.Context, uid int64, tid int64) error {
 	err := DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		// 在事务中执行一些 db 操作（从这里开始，您应该使用 'tx' 而不是 'db'）
@@ -101,6 +113,7 @@ func DisRelation(ctx context.Context, uid int64, tid int64) error {
 	return err
 }
 
+// FollowingList returns the Following List.
 func FollowingList(ctx context.Context, uid int64) ([]*Relation, error) {
 	var RelationList []*Relation
 	err := DB.WithContext(ctx).Where("user_id = ?", uid).Find(&RelationList).Error
@@ -110,6 +123,7 @@ func FollowingList(ctx context.Context, uid int64) ([]*Relation, error) {
 	return RelationList, nil
 }
 
+// FollowerList returns the Follower List.
 func FollowerList(ctx context.Context, tid int64) ([]*Relation, error) {
 	var RelationList []*Relation
 	err := DB.WithContext(ctx).Where("to_user_id = ?", tid).Find(&RelationList).Error

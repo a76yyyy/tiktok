@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 23:16:36
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-18 23:46:09
+ * @FilePath: /tiktok/cmd/api/rpc/relation.go
+ * @Description: Relation RPC 客户端初始化及 相关 RPC 通信操作定义
+ */
+
 package rpc
 
 import (
@@ -20,6 +29,7 @@ import (
 
 var relationClient relationsrv.Client
 
+// Relation RPC 客户端初始化
 func initRelationRpc(Config *ttviper.Config) {
 	EtcdAddress := fmt.Sprintf("%s:%d", Config.Viper.GetString("Etcd.Address"), Config.Viper.GetInt("Etcd.Port"))
 	r, err := etcd.NewEtcdResolver([]string{EtcdAddress})
@@ -54,6 +64,7 @@ func initRelationRpc(Config *ttviper.Config) {
 	relationClient = c
 }
 
+// 传递 关注操作 的上下文, 并获取 RPC Server 端的响应.
 func RelationAction(ctx context.Context, req *relation.DouyinRelationActionRequest) (resp *relation.DouyinRelationActionResponse, err error) {
 	resp, err = relationClient.RelationAction(ctx, req)
 	if err != nil {
@@ -65,6 +76,7 @@ func RelationAction(ctx context.Context, req *relation.DouyinRelationActionReque
 	return resp, nil
 }
 
+// 传递 获取正在关注列表操作 的上下文, 并获取 RPC Server 端的响应.
 func RelationFollowList(ctx context.Context, req *relation.DouyinRelationFollowListRequest) (resp *relation.DouyinRelationFollowListResponse, err error) {
 	resp, err = relationClient.RelationFollowList(ctx, req)
 	if err != nil {
@@ -76,6 +88,7 @@ func RelationFollowList(ctx context.Context, req *relation.DouyinRelationFollowL
 	return resp, nil
 }
 
+// 传递 获取粉丝列表操作 的上下文, 并获取 RPC Server 端的响应.
 func RelationFollowerList(ctx context.Context, req *relation.DouyinRelationFollowerListRequest) (resp *relation.DouyinRelationFollowerListResponse, err error) {
 	resp, err = relationClient.RelationFollowerList(ctx, req)
 	if err != nil {

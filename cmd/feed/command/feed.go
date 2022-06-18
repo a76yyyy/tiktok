@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 09:11:35
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:02:00
+ * @FilePath: /tiktok/cmd/feed/command/feed.go
+ * @Description: 视频流 操作业务逻辑
+ */
+
 package command
 
 import (

@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 00:00:46
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:00:44
+ * @FilePath: /tiktok/cmd/publish/handler.go
+ * @Description: 定义 Publish RPC Server 端的相关接口
+ */
+
 package main
 
 import (

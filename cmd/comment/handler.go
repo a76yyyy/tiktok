@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 00:03:00
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-18 23:52:17
+ * @FilePath: /tiktok/cmd/comment/handler.go
+ * @Description: 定义 Comment RPC Server 端的相关接口
+ */
+
 package main
 
 import (
@@ -48,6 +57,7 @@ func (s *CommentSrvImpl) CommentList(ctx context.Context, req *comment.DouyinCom
 
 	if req.VideoId == 0 || claim.Id == 0 {
 		resp = pack.BuildCommentListResp(errno.ErrBind)
+		return resp, nil
 	}
 
 	comments, err := command.NewCommentListService(ctx).CommentList(req, claim.Id)

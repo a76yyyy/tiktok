@@ -1,3 +1,12 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-11 00:10:37
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 00:53:05
+ * @FilePath: /tiktok/pkg/jwt/jwt.go
+ * @Description:  基于 http://github.com/golang-jwt/jwt 的代码封装
+ */
+
 package jwt
 
 import (
@@ -8,6 +17,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
+// JWT signing Key
 type JWT struct {
 	SigningKey []byte
 }
@@ -19,6 +29,7 @@ var (
 	ErrTokenInvalid     = errors.WithCode(code.ErrTokenInvalid, "Couldn't handle this token")
 )
 
+// CustomClaims Structured version of Claims Section, as referenced at https://tools.ietf.org/html/rfc7519#section-4.1 See examples for how to use this with your own claim types
 type CustomClaims struct {
 	Id          int64
 	AuthorityId int64
@@ -31,6 +42,7 @@ func NewJWT(SigningKey []byte) *JWT {
 	}
 }
 
+// CreateToken creates a new token
 func (j *JWT) CreateToken(claims CustomClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	//zap.S().Debugf(token.SigningString())
@@ -38,6 +50,7 @@ func (j *JWT) CreateToken(claims CustomClaims) (string, error) {
 
 }
 
+// ParseToken parses the token.
 func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return j.SigningKey, nil
