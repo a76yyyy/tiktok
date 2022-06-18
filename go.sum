@@ -64,8 +64,8 @@ github.com/DefinitelyMod/gocsv v0.0.0-20181205141819-acfa5f112b45 h1:+OD9vawobD8
 github.com/DefinitelyMod/gocsv v0.0.0-20181205141819-acfa5f112b45/go.mod h1:+nlrAh0au59iC1KN5RA1h1NdiOQYlNOBrbtE1Plqht4=
 github.com/HdrHistogram/hdrhistogram-go v1.1.2/go.mod h1:yDgFjdqOqDEKOvasDdhWNXYg9BVp4O+o5f6V/ehm6Oo=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
-github.com/a76yyyy/ErrnoCode v1.0.1 h1:eWwFKCiEo48Elm8FyhLXOlo0ewIjO1WJmZawmkiEJzs=
-github.com/a76yyyy/ErrnoCode v1.0.1/go.mod h1:Rj5bq7Z0J/SMOyhlvBVZuH2o2ZMjziLK8ur24wicb38=
+github.com/a76yyyy/ErrnoCode v1.0.2 h1:v2cRUu9U66JPgzmt0kyZu+32KzArXr20iWLd0//NC3o=
+github.com/a76yyyy/ErrnoCode v1.0.2/go.mod h1:Rj5bq7Z0J/SMOyhlvBVZuH2o2ZMjziLK8ur24wicb38=
 github.com/a76yyyy/errors v1.0.3 h1:abH8ob9N/BStxF3f1A4VFVA+QbDlxZymBvRBMTOod5k=
 github.com/a76yyyy/errors v1.0.3/go.mod h1:fYCn5eQzh48e8izQYs9c5X4AXt4KwLW9IVOACZpV01s=
 github.com/a76yyyy/registry-etcd v0.0.5 h1:Bzq4baPywrFZEzGgWy8vvuCsNg9bqGPIxLWNkHFqzEY=

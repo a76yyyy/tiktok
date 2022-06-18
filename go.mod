@@ -3,7 +3,7 @@ module github.com/a76yyyy/tiktok
 go 1.18
 
 require (
-	github.com/a76yyyy/ErrnoCode v1.0.1
+	github.com/a76yyyy/ErrnoCode v1.0.2
 	github.com/a76yyyy/errors v1.0.3
 	github.com/a76yyyy/registry-etcd v0.0.5
 	github.com/cloudwego/kitex v0.3.2
@@ -125,7 +125,7 @@ require (
 	go.opentelemetry.io/proto/otlp v0.16.0 // indirect
 	go.uber.org/atomic v1.8.0 // indirect
 	go.uber.org/multierr v1.8.0
-	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4 // indirect
+	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
 	golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2 // indirect
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5 // indirect
 	golang.org/x/sync v0.0.0-20220513210516-0976fa681c29 // indirect
