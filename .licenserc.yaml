@@ -1,0 +1,15 @@
+header:
+  license:
+    spdx-id: Apache-2.0
+    copyright-owner: a76yyyy && CloudWeGo Authors
+
+  paths:
+    - '**/*.go'
+    - '**/*.s'
+    - '**/*.thrift'
+
+  paths-ignore:
+    - '**/kitex_gen/**'
+    - '**/*.proto'
+
+  comment: on-failure
