@@ -46,7 +46,7 @@
 
 ## 3. 数据库 ER 图
 
-![image.png](pic/ER%E5%9B%BE.PNG)
+![image.png](pic/ER%E5%9B%BE.png)
 
 ## 4. 代码介绍
 
