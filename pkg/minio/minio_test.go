@@ -1,3 +1,11 @@
+/*
+ * @Author: a76yyyy q981331502@163.com
+ * @Date: 2022-06-12 10:00:59
+ * @LastEditors: a76yyyy q981331502@163.com
+ * @LastEditTime: 2022-06-19 01:15:17
+ * @FilePath: /tiktok/pkg/minio/minio_test.go
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 package minio
 
 import (
@@ -7,8 +15,12 @@ import (
 	"testing"
 )
 
+func TestCreateBucket(t *testing.T) {
+	CreateBucket("TiktokTest")
+}
+
 func TestUploadLocalFile(t *testing.T) {
-	info, err := UploadLocalFile("mymusic", "haokan.mp4", "./test.mp4", "video/mp4")
+	info, err := UploadLocalFile("TiktokTest", "test.mp4", "./test.mp4", "video/mp4")
 	fmt.Println(info, err)
 }
 
@@ -16,19 +28,12 @@ func TestUploadFile(t *testing.T) {
 	file, _ := os.Open("./test.mp4")
 	defer file.Close()
 	fi, _ := os.Stat("./test.mp4")
-	err := UploadFile("mymusic", "ceshi2", file, fi.Size())
+	err := UploadFile("TiktokTest", "ceshi2", file, fi.Size())
 	fmt.Println(err)
 }
 
 func TestGetFileUrl(t *testing.T) {
-	url, err := GetFileUrl("mymusic", "test.mp4", 0)
+	url, err := GetFileUrl("TiktokTest", "test.mp4", 0)
 	fmt.Println(url, err, strings.Split(url.String(), "?")[0])
 	fmt.Println(url.Path, url.RawPath)
-}
-
-func TestCreateBucket(t *testing.T) {
-	CreateBucket("")
-}
-
-func TestInitMinio(t *testing.T) {
 }
