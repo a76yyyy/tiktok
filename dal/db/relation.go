@@ -64,10 +64,13 @@ func NewRelation(ctx context.Context, uid int64, tid int64) error {
 }
 
 func DisRelation(ctx context.Context, uid int64, tid int64) error {
-	relation := Relation{}
 	err := DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		// 在事务中执行一些 db 操作（从这里开始，您应该使用 'tx' 而不是 'db'）
-		tx.Where("user_id = ? AND to_user_id=?", uid, tid).First(&relation)
+		relation := new(Relation)
+		if err := tx.Where("user_id = ? AND to_user_id=?", uid, tid).First(&relation).Error; err != nil {
+			return err
+		}
+
 		//1. 删除关注数据
 		err := tx.Unscoped().Delete(&relation).Error
 		if err != nil {

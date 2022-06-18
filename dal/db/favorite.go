@@ -57,10 +57,13 @@ func Favorite(ctx context.Context, uid int64, vid int64) error {
 }
 
 func DisFavorite(ctx context.Context, uid int64, vid int64) error {
-	favoriteRelation := FavoriteRelation{}
 	err := DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		// 在事务中执行一些 db 操作（从这里开始，您应该使用 'tx' 而不是 'db'）
-		tx.First(&favoriteRelation, "user_id = ? and video_id = ?", uid, vid)
+		favoriteRelation := new(FavoriteRelation)
+		if err := tx.Where("user_id = ? and video_id = ?", uid, vid).First(&favoriteRelation).Error; err != nil {
+			return err
+		}
+
 		//1. 删除点赞数据
 		err := tx.Unscoped().Delete(&favoriteRelation).Error
 		if err != nil {
