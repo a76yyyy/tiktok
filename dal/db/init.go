@@ -65,7 +65,7 @@ func InitDB() {
 		logger.ZapLogger.Panic(err.Error())
 	}
 
-	if err := DB.AutoMigrate(&User{}, &Video{}, &FavoriteRelation{}, &Comment{}, &Relation{}); err != nil {
+	if err := DB.AutoMigrate(&User{}, &Video{}, &Comment{}, &Relation{}); err != nil {
 		logger.ZapLogger.Panic(err.Error())
 	}
 

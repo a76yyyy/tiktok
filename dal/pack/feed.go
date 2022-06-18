@@ -53,9 +53,9 @@ func Videos(ctx context.Context, vs []*db.Video, fromID *int64) ([]*feed.Video, 
 				results, err := db.GetFavoriteRelation(ctx, *fromID, int64(v.ID))
 				if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 					return nil, err
-				}
-
-				if results != nil {
+				} else if errors.Is(err, gorm.ErrRecordNotFound) {
+					flag = false
+				} else if results != nil && results.AuthorID != 0 {
 					flag = true
 				}
 			}
