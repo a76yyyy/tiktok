@@ -24,7 +24,7 @@ import (
 type User struct {
 	gorm.Model
 	UserName       string `gorm:"index:idx_username,unique;type:varchar(40);not null" json:"username"`
-	Password       string `gorm:"type:varchar(40);not null" json:"password"`
+	Password       string `gorm:"type:varchar(256);not null" json:"password"`
 	FollowingCount int    `gorm:"default:0"`
 	FollowerCount  int    `gorm:"default:0"`
 }

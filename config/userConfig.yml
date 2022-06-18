@@ -13,6 +13,12 @@ Server:
   Name: "TiktokUserServer"
   Address: "127.0.0.1"
   Port: 8081
+  Argon2ID:
+    Memory: 64*1024
+    Iterations: 3
+    Parallelism: 2
+    SaltLength: 16
+    keyLength: 32
 
 Client:
   Echo: true

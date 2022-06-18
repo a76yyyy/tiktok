@@ -21,7 +21,7 @@ func (s *UserSrvImpl) Register(ctx context.Context, req *user.DouyinUserRegister
 		return resp, nil
 	}
 
-	err = command.NewCreateUserService(ctx).CreateUser(req)
+	err = command.NewCreateUserService(ctx).CreateUser(req, Argon2Config)
 	if err != nil {
 		resp = pack.BuilduserRegisterResp(err)
 		return resp, nil
