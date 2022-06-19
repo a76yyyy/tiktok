@@ -25,7 +25,6 @@ package command
 
 import (
 	"context"
-	"sort"
 	"time"
 
 	"github.com/a76yyyy/tiktok/dal/pack"
@@ -56,20 +55,15 @@ func (s *GetUserFeedService) GetUserFeed(req *feed.DouyinFeedRequest, fromID int
 	}
 
 	if len(videos) == 0 {
+		nextTime = time.Now().UnixMilli()
 		return vis, nextTime, nil
+	} else {
+		nextTime = videos[len(videos)-1].UpdatedAt.UnixMilli()
 	}
 
 	if vis, err = pack.Videos(s.ctx, videos, &fromID); err != nil {
-		return vis, nextTime, nil
-	}
-
-	if len(videos) > 0 {
-		sort.Slice(videos, func(i, j int) bool {
-			return videos[i].UpdatedAt.UnixMilli() > videos[j].UpdatedAt.UnixMilli()
-		})
-		nextTime = videos[len(videos)-1].UpdatedAt.UnixMilli()
-	} else {
 		nextTime = time.Now().UnixMilli()
+		return vis, nextTime, err
 	}
 
 	return vis, nextTime, nil
