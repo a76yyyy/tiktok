@@ -38,7 +38,7 @@
 | favorite | 用户点赞微服务 |
 | comment | 用户评论微服务 |
 | publish | 视频发布微服务 |||||`MySQL` `gorm` `minio对象存储` |
-| dal | 用户管理微服务 | `MySQL` `gorm` | - || | `MySQL` `gorm` |
+| dal | 数据层实现 | `MySQL` `gorm` | - || | `MySQL` `gorm` |
 
 ## 2. 服务调用关系
 
