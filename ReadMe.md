@@ -143,12 +143,18 @@
 
 # 四、下一步计划
 
-1. 编写 DockerFile 实现分布式容器部署
+1. 检查 自封装的 dlog 包中 callerSkip存在的问题 / 使用 [obs-opentelemetry](https://github.com/kitex-contrib/obs-opentelemetry/tree/main/logging) 提供的 Logger 作为 DefaultLogger
 
-2. 检查 自封装的 dlog 包中 callerSkip存在的问题
+2. DAL 层优化 `for` 循环内的 db 查询
 
-3. 采用 Redis 作为 NoSQL 缓存，优化 JWT 鉴权，结合消息队列和 Redis 实现对定时更新 Token、各种操作数据 的缓存和持久性存储
+3. 使用 Jaeger 实现链路跟踪可视化
 
-4. 使用 Jaeger 实现链路跟踪可视化
+4. 添加 RPC微服务 Handler 部分的单元测试内容
 
-5. 添加 RPC微服务 Handler 部分的单元测试内容
+5. 编写 DockerFile 实现分布式容器部署
+
+6. 采用 Redis 作为 NoSQL 缓存，优化 JWT 鉴权，结合消息队列和 Redis 实现对定时更新 Token、各种操作数据 的缓存和持久性存储
+
+7. 使用 Hertz 替换 Gin, 提高 HTTP 层的性能和可扩展性
+
+8. 实现分库分表
