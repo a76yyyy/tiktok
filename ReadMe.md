@@ -4,7 +4,8 @@
 2. actiontype语义化
 3. 优化一下存储，使用redis缓存
 4. minio不要对外暴露9001端口，容易被攻击
-
+5. pack逻辑存在for循环查询数据库，pack只用于数据打包，不应该出现查库逻辑
+6. open telemetry本身提供了logger，不用重新封装
 # 一、项目特点
 
 1. 采用RPC框架（Kitex）脚手架生成代码进行开发，基于 **RPC 微服务** + **Gin 提供 HTTP 服务**
