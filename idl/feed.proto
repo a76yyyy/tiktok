@@ -36,6 +36,6 @@ message Video {
 }
 
 service FeedSrv{
-    rpc GetUserFeed (douyin_feed_request) returns (douyin_feed_response) {} //返回一个视频列表
-    rpc GetVideoById (video_id_request) returns (Video) {} // 根据视频id返回一个视频
+    rpc GetUserFeed (douyin_feed_request) returns (douyin_feed_response); //返回一个视频列表
+    rpc GetVideoById (video_id_request) returns (Video); // 根据视频id返回一个视频
 }

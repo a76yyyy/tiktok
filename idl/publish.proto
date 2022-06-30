@@ -27,6 +27,6 @@ message douyin_publish_list_response {
 }
 
 service PublishSrv{
-    rpc PublishAction(douyin_publish_action_request) returns (douyin_publish_action_response);
-    rpc PublishList(douyin_publish_list_request) returns (douyin_publish_list_response);
+    rpc PublishAction(douyin_publish_action_request) returns (douyin_publish_action_response); //发布视频操作
+    rpc PublishList(douyin_publish_list_request) returns (douyin_publish_list_response);// 获取用户已发布视频的列表
 }

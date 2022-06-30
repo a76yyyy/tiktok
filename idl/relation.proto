@@ -39,7 +39,7 @@ message douyin_relation_follower_list_response {
 }
 
 service RelationSrv{
-    rpc RelationAction(douyin_relation_action_request) returns (douyin_relation_action_response);
-    rpc RelationFollowList(douyin_relation_follow_list_request) returns (douyin_relation_follow_list_response);
-    rpc RelationFollowerList(douyin_relation_follower_list_request) returns (douyin_relation_follower_list_response);
+    rpc RelationAction(douyin_relation_action_request) returns (douyin_relation_action_response); //关注或取消关注
+    rpc RelationFollowList(douyin_relation_follow_list_request) returns (douyin_relation_follow_list_response); //获取已关注用户的列表
+    rpc RelationFollowerList(douyin_relation_follower_list_request) returns (douyin_relation_follower_list_response); //获取粉丝用户列表
 }

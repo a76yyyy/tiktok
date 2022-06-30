@@ -38,6 +38,6 @@ message Comment {
 }
 
 service CommentSrv{
-    rpc CommentAction(douyin_comment_action_request) returns (douyin_comment_action_response);
-    rpc CommentList(douyin_comment_list_request) returns (douyin_comment_list_response);
+    rpc CommentAction(douyin_comment_action_request) returns (douyin_comment_action_response); //评论操作
+    rpc CommentList(douyin_comment_list_request) returns (douyin_comment_list_response); //返回评论列表
 }
