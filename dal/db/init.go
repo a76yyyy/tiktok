@@ -40,6 +40,10 @@ var (
 	Config = ttviper.ConfigInit("TIKTOK_DB", "dbConfig")
 )
 
+func Init() {
+	InitDB()
+}
+
 // Init init DB
 func InitDB() {
 	var err error
@@ -69,10 +73,13 @@ func InitDB() {
 		logger.ZapLogger.Panic(err.Error())
 	}
 
+	// gorm open telemetry records database queries and reports DBStats metrics.
 	if err = DB.Use(otelgorm.NewPlugin()); err != nil {
 		logger.ZapLogger.Panic(err.Error())
 	}
 
+	// AutoMigrate会创建表，缺失的外键，约束，列和索引。如果大小，精度，是否为空，可以更改，则AutoMigrate会改变列的类型。出于保护您数据的目的，它不会删除未使用的列
+	// 刷新数据库的表格，使其保持最新。即如果我在旧表的基础上增加一个字段age，那么调用autoMigrate后，旧表会自动多出一列age，值为空
 	if err := DB.AutoMigrate(&User{}, &Video{}, &Comment{}, &Relation{}); err != nil {
 		logger.ZapLogger.Panic(err.Error())
 	}
@@ -93,8 +100,4 @@ func InitDB() {
 
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
 	sqlDB.SetConnMaxLifetime(time.Hour)
-}
-
-func Init() {
-	InitDB()
 }
