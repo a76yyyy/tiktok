@@ -43,6 +43,7 @@ var (
 	ErrTokenInvalid     = errors.WithCode(code.ErrTokenInvalid, "Couldn't handle this token")
 )
 
+// private claims, share information between parties that agree on using them
 // CustomClaims Structured version of Claims Section, as referenced at https://tools.ietf.org/html/rfc7519#section-4.1 See examples for how to use this with your own claim types
 type CustomClaims struct {
 	Id          int64
@@ -59,7 +60,7 @@ func NewJWT(SigningKey []byte) *JWT {
 // CreateToken creates a new token
 func (j *JWT) CreateToken(claims CustomClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	//zap.S().Debugf(token.SigningString())
+	// zap.S().Debugf(token.SigningString())
 	return token.SignedString(j.SigningKey)
 
 }
@@ -83,6 +84,7 @@ func (j *JWT) ParseToken(tokenString string) (*CustomClaims, error) {
 
 		}
 	}
+	// verify the token claims
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
 		return claims, nil
 	}

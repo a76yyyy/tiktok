@@ -1,5 +1,6 @@
 version: '3'
 
+# 不暴露9001端口号
 x-minio-common: &minio-common
   image: quay.io/minio/minio:latest
   command: server --console-address ":9001" http://minio{1...4}/data{1...2}
@@ -33,6 +34,7 @@ services:
     ports:
       - 2379:2379
 
+  # Open telemetry
   otel-collector:
     image: otel/opentelemetry-collector-contrib-dev:latest
     command: [ "--config=/etc/otel-collector-config.yml", "${OTELCOL_ARGS}" ]
@@ -58,6 +60,7 @@ services:
       - "6831:6831"
 
   # Victoriametrics
+  # open source time series database & monitoring solution
   victoriametrics:
     container_name: victoriametrics
     image: victoriametrics/victoria-metrics
@@ -77,6 +80,9 @@ services:
     restart: always
 
   # Grafana
+  # 数据可是化工具，数据监控，数据统计
+  # “3000:3000"表示端口映射
+  # 第一个为外部端口，第一个为内部端口号
   grafana:
     image: grafana/grafana:latest
     environment:
@@ -89,6 +95,7 @@ services:
   # starts 4 docker containers running minio server instances.
   # using nginx reverse proxy, load balancing, you can access
   # it through port 9000.
+  # 高性能对象存储
   minio1:
     <<: *minio-common
     hostname: minio1

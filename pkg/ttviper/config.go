@@ -49,7 +49,7 @@ var (
 	isRemoteConfig bool
 
 	GlobalSource = pflag.String("global.source", "default(flag)", "identify the source of configuration")
-	//var globalUnset = pflag.String("global.unset", "default(flag)", "this parameter do not appear in config file")
+	// var globalUnset = pflag.String("global.unset", "default(flag)", "this parameter do not appear in config file")
 	GlobalUnset = pflag.String("global.unset", "", "this parameter do not appear in config file")
 )
 
@@ -74,7 +74,7 @@ func (v *Config) SetRemoteConfig(u *url.URL) {
 
 		etcd:
 		  url格式为： etcd+http://127.0.0.1:2380/path/to/key.yaml
-		  其中：provider=etcd, endpoint=http://127.0,0.1:2380, path=/path/to/key
+		  其中：provider=etcd, endpoint=http://127.0.0.1:2380, path=/path/to/key.yaml
 
 		consul:
 		  url格式为：consul://127.0.0.1:8500/key.json
@@ -101,10 +101,10 @@ func (v *Config) SetRemoteConfig(u *url.URL) {
 		}
 		protocol := schemes[1]
 		endpoint = fmt.Sprintf("%s://%s", protocol, u.Host)
-		path = u.Path
+		path = u.Path // u.Path = /path/to/key.yaml
 	case "consul":
 		endpoint = u.Host
-		path = u.Path[1:]
+		path = u.Path[1:] // u.Path = /key.json
 	default:
 		panic(fmt.Errorf("unsupported provider '%s'", provider))
 	}
@@ -146,14 +146,14 @@ func (v *Config) WatchRemoteConf() {
 
 		// unmarshal new config into our runtime config struct. you can also use channel
 		// to implement a signal to notify the system of the changes
-		//runtime_viper.Unmarshal(&runtime_conf)
+		// runtime_viper.Unmarshal(&runtime_conf)
 		klog.Info("Watching Remote Config")
 		klog.Infof("Global.Source: '%s'\n", v.Viper.GetString("Global.Source"))
 		klog.Infof("Global.ChangeMe: '%s'\n", v.Viper.GetString("Global.ChangeMe"))
 	}
 }
 
-// ZapLogConfig
+// ZapLogConfig 读取Log的配置文件，并返回
 func (v *Config) ZapLogConfig() []byte {
 	log := v.Viper.Sub("Log")
 	logConfig, err := json.Marshal(log.AllSettings())
@@ -163,7 +163,7 @@ func (v *Config) ZapLogConfig() []byte {
 	return logConfig
 }
 
-// InitLogger
+// InitLogger 解析Log配置文件，设置相关参数，最后返回Logger
 func (v *Config) InitLogger() *zap.Logger {
 	var cfg zap.Config
 	if err := json.Unmarshal(v.ZapLogConfig(), &cfg); err != nil {
@@ -231,11 +231,12 @@ func ConfigInit(envPrefix string, cfgName string) Config {
 			其中<ext> 是 viper所支持的文件类型，如yml，json等
 		*/
 
-		viper.SetConfigName(cfgName) //name of config file (without extension)
+		viper.SetConfigName(cfgName) // name of config file (without extension)
 		viper.AddConfigPath("/etc/tiktok/config")
 		viper.AddConfigPath("$HOME/.tiktok/")
 		viper.AddConfigPath("./config")
 		viper.AddConfigPath("../../config")
+		viper.AddConfigPath("../../../config")
 	}
 
 	if isRemoteConfig {
@@ -245,7 +246,7 @@ func ConfigInit(envPrefix string, cfgName string) Config {
 		fmt.Printf("Using Remote Config: '%s'\n", configVar)
 
 		viper.WatchRemoteConfig()
-
+		// 另启动一个协程来监测远程配置文件
 		go config.WatchRemoteConf()
 
 	} else {
