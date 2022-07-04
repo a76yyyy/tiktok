@@ -34,6 +34,8 @@ import (
 )
 
 // User pack user info
+// db.User结构体是用于和数据库交互的
+// user.User结构体是用于RPC传输信息的
 func User(ctx context.Context, u *db.User, fromID int64) (*user.User, error) {
 	if u == nil {
 		return &user.User{
@@ -41,9 +43,11 @@ func User(ctx context.Context, u *db.User, fromID int64) (*user.User, error) {
 		}, nil
 	}
 
-	follow_count := int64(u.FollowerCount)
+	// follow_count := int64(u.FollowerCount),笔误
+	follow_count := int64(u.FollowingCount)
 	follower_count := int64(u.FollowerCount)
 
+	// true->fromID已关注u.ID，false-fromID未关注u.ID
 	isFollow := false
 	relation, err := db.GetRelation(ctx, fromID, int64(u.ID))
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
