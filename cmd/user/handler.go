@@ -33,7 +33,7 @@ import (
 	"github.com/a76yyyy/tiktok/pkg/jwt"
 )
 
-// UserSrvImpl implements the last service interface defined in the IDL.
+// UserSrvImpl implements the user service interface defined in the IDL.
 type UserSrvImpl struct{}
 
 // Register implements the UserSrvImpl interface.
@@ -50,6 +50,7 @@ func (s *UserSrvImpl) Register(ctx context.Context, req *user.DouyinUserRegister
 		return resp, nil
 	}
 
+	// 新用户注册成功后直接登录
 	uid, err := command.NewCheckUserService(ctx).CheckUser(req)
 	if err != nil {
 		resp = pack.BuilduserRegisterResp(err)

@@ -42,6 +42,14 @@ type CreateUserService struct {
 	ctx context.Context
 }
 
+type Argon2Params struct {
+	Memory      uint32
+	Iterations  uint32
+	Parallelism uint8
+	SaltLength  uint32
+	KeyLength   uint32
+}
+
 // NewCreateUserService new CreateUserService
 func NewCreateUserService(ctx context.Context) *CreateUserService {
 	return &CreateUserService{ctx: ctx}
@@ -67,14 +75,6 @@ func (s *CreateUserService) CreateUser(req *user.DouyinUserRegisterRequest, argo
 		UserName: req.Username,
 		Password: passWord,
 	}})
-}
-
-type Argon2Params struct {
-	Memory      uint32
-	Iterations  uint32
-	Parallelism uint8
-	SaltLength  uint32
-	KeyLength   uint32
 }
 
 // generateFromPassword generate the hash from the password string with salt and iterations values.
