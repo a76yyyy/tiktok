@@ -77,11 +77,9 @@ func main() {
 	}
 	zaplogger := zapgorm2.New(dlog.InitLog())
 	logger.SugaredLogger.Base = &zaplogger
-
 	klog.SetLogger(&logger)
-
 	defer logger.SugaredLogger.Base.ZapLogger.Sync()
-
+	// 服务注册
 	r, err := etcd.NewEtcdRegistry([]string{EtcdAddress})
 	if err != nil {
 		klog.Fatal(err)

@@ -35,6 +35,7 @@ import (
 
 var _ endpoint.Middleware = CommonMiddleware
 
+// zapgorm2 is a zap logging driver for gorm v2
 func init() {
 	var logger dlog.ZapLogger = dlog.ZapLogger{
 		Level: klog.LevelInfo,

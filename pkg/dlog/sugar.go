@@ -49,6 +49,8 @@ const (
 	_nonStringKeyErrMsg = "Ignored key-value pairs with non-string keys."
 )
 
+// In contexts where performance is nice, but not critical, use the SugaredLogger.
+
 // A SugaredLogger wraps the Base Logger functionality in a slower, but less
 // verbose, API. Any Logger can be converted to a SugaredLogger with its Sugar
 // method.

@@ -52,7 +52,7 @@ func CreateBucket(bucketName string) error {
 			return err
 		}
 	} else {
-		klog.Info("bucket create successfully")
+		klog.Infof("bucket %s create successfully", bucketName)
 	}
 	return nil
 }

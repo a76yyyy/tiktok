@@ -34,7 +34,7 @@ message User {
 }
 
 service UserSrv{
-    rpc Register (douyin_user_register_request) returns (douyin_user_register_response) {}
-    rpc Login (douyin_user_register_request) returns (douyin_user_register_response) {}
-    rpc GetUserById (douyin_user_request) returns (douyin_user_response) {}
+    rpc Register (douyin_user_register_request) returns (douyin_user_register_response);
+    rpc Login (douyin_user_register_request) returns (douyin_user_register_response);
+    rpc GetUserById (douyin_user_request) returns (douyin_user_response);
 }

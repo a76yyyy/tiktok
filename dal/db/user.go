@@ -30,6 +30,7 @@ import (
 )
 
 // User Gorm Data Structures
+// User和Video是多对多关系，两个模型之间会有一个连接表 user_favorite_videos
 type User struct {
 	gorm.Model
 	UserName       string  `gorm:"index:idx_username,unique;type:varchar(40);not null" json:"username"`
@@ -56,7 +57,7 @@ func MGetUsers(ctx context.Context, userIDs []int64) ([]*User, error) {
 	return res, nil
 }
 
-// GetUserByID multiple get list of user info
+// GetUserByID
 func GetUserByID(ctx context.Context, userID int64) (*User, error) {
 	res := new(User)
 

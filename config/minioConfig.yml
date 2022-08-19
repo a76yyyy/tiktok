@@ -2,8 +2,9 @@ Global:
   Source: "config(local)"
   ChangeMe: "v3"
 
+# Endpoint: 配置为运行minio服务的主机地址
 Minio:
-  Endpoint: 192.168.123.12:9000
+  Endpoint: 192.168.1.10:9000
   AccessKeyId: tiktokMinio
   SecretAccessKey: tiktokMinio
   UseSSL: false

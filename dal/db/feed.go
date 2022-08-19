@@ -31,6 +31,7 @@ import (
 )
 
 // Video Gorm Data Structures
+// Video 属于 Author, AuthorID是外键(belongs to)
 type Video struct {
 	gorm.Model
 	UpdatedAt     time.Time `gorm:"column:update_time;not null;index:idx_update" `

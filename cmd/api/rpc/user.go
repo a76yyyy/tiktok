@@ -46,6 +46,7 @@ var userClient usersrv.Client
 // User RPC 客户端初始化
 func initUserRpc(Config *ttviper.Config) {
 	EtcdAddress := fmt.Sprintf("%s:%d", Config.Viper.GetString("Etcd.Address"), Config.Viper.GetInt("Etcd.Port"))
+	// 服务发现
 	r, err := etcd.NewEtcdResolver([]string{EtcdAddress})
 	if err != nil {
 		panic(err)
