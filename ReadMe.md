@@ -1,11 +1,6 @@
 # tiktok
 基于 kitex RPC微服务 + Gin HTTP服务完成的第三届字节跳动青训营-极简抖音后端项目
-1. import可以规范一下，官方库一段，剩下的库一段
-2. actiontype语义化
-3. 优化一下存储，使用redis缓存
-4. minio不要对外暴露9001端口，容易被攻击
-5. pack逻辑存在for循环查询数据库，pack只用于数据打包，不应该出现查库逻辑
-6. open telemetry本身提供了logger，不用重新封装
+
 # 一、项目特点
 
 1. 采用RPC框架（Kitex）脚手架生成代码进行开发，基于 **RPC 微服务** + **Gin 提供 HTTP 服务**
@@ -144,9 +139,21 @@
     chmod +x ./run.sh
     sh ./run.sh 
     ```
+# 四、存在问题
 
+1. import可以规范一下，官方库一段，剩下的库一段
 
-# 四、下一步计划
+2. actiontype语义化
+
+3. 优化一下存储，使用redis缓存
+
+4. minio不要对外暴露9001端口，容易被攻击
+
+5. pack逻辑存在for循环查询数据库，pack只用于数据打包，不应该出现查库逻辑
+
+6. open telemetry本身提供了logger，不用重新封装
+
+# 五、下一步计划
 
 1. 检查 自封装的 dlog 包中 callerSkip存在的问题 / 使用 [obs-opentelemetry](https://github.com/kitex-contrib/obs-opentelemetry/tree/main/logging) 提供的 Logger 作为 DefaultLogger
 
