@@ -1,7 +1,8 @@
 # tiktok
+
 基于 kitex RPC微服务 + Gin HTTP服务完成的第三届字节跳动青训营-极简抖音后端项目
 
-# 一、项目特点
+## 一、项目特点
 
 1. 采用RPC框架（Kitex）脚手架生成代码进行开发，基于 **RPC 微服务** + **Gin 提供 HTTP 服务**
 
@@ -21,13 +22,13 @@
 
 9. 数据库表建立了索引和外键约束，对于具有关联性的操作一旦出错立刻回滚，保证数据一致性和安全性
 
-# 二、项目地址
+## 二、项目地址
 
-- **https://github.com/a76yyyy/tiktok**
+- **<https://github.com/a76yyyy/tiktok>**
 
-# 三、项目说明
+## 三、项目说明
 
-## 1. 项目模块介绍
+### 1. 项目模块介绍
 
 | 服务名称 | 模块介绍 | 技术框架 | 传输协议 | 注册中心 | 链路跟踪 | 数据存储 | 日志 | 配置存取 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -40,17 +41,25 @@
 | publish | 视频发布微服务 |||||`MySQL` `gorm` `minio对象存储` |
 | dal | 数据层实现 | `MySQL` `gorm` | - || | `MySQL` `gorm` |
 
-## 2. 服务调用关系
+### 2. 服务调用关系
 
 ![image.png](pic/%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E5%85%B3%E7%B3%BB.png)
 
-## 3. 数据库 ER 图
+- HTTP 使用 GIN 开放 HTTP 端口, 通过封装的RPC客户端与微服务中的服务端通信;
+
+- RPC 微服务, 接收客户端的请求, 在各自的 command 中实现与数据库交互的业务逻辑;
+
+- DAL 提供数据层实现, pack 部分实现将数据库输出封装为服务端的响应结构体;
+
+- MiddleWare 提供中间件业务逻辑代码实现.
+
+### 3. 数据库 ER 图
 
 ![image.png](pic/ER%E5%9B%BE.png)
 
-## 4. 代码介绍
+### 4. 代码介绍
 
-### 4.1 代码目录结构介绍
+#### 4.1 代码目录结构介绍
 
 | 目录 | 子目录 | 说明 | 备注 |
 | --- | --- | --- | --- |
@@ -73,7 +82,7 @@
 || [minio](https://github.com/a76yyyy/tiktok/tree/master/pkg/minio) | **Minio** 对象存储初始化及代码封装 |
 || [ttviper](https://github.com/a76yyyy/tiktok/tree/master/pkg/ttviper) | **Viper** 配置存取初始化及代码封装 |
 
-### 4.2 代码运行
+#### 4.2 代码运行
 
 1. 提前修改 [config](https://github.com/a76yyyy/tiktok/tree/master/config)目录的相关配置
 
@@ -139,7 +148,46 @@
     chmod +x ./run.sh
     sh ./run.sh 
     ```
-# 四、存在问题
+
+## 四、项目接口介绍
+
+### User 微服务
+
+| 注册接口 | 登录接口 | 获取用户信息接口 |
+| --- | --- | --- |
+| ![注册接口.png](pic/%E6%B3%A8%E5%86%8C%E6%8E%A5%E5%8F%A3.png) | ![登录接口.png](pic/%E7%99%BB%E5%BD%95%E6%8E%A5%E5%8F%A3.png) | ![获取用户信息接口.png](pic/%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF%E6%8E%A5%E5%8F%A3.png) |
+
+### Feed 微服务
+
+| 获取视频流接口 |
+| --- |
+| ![获取视频流接口.png](pic/%E8%8E%B7%E5%8F%96%E8%A7%86%E9%A2%91%E6%B5%81%E6%8E%A5%E5%8F%A3.png) |
+
+### Publish 微服务
+
+| 投稿视频接口 | 获取用户发布视频列表接口 |
+| --- | --- |
+| ![投稿视频接口.png](pic/%E6%8A%95%E7%A8%BF%E8%A7%86%E9%A2%91%E6%8E%A5%E5%8F%A3.png) | ![获取用户发布视频列表接口.png](pic/%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%8F%91%E5%B8%83%E8%A7%86%E9%A2%91%E5%88%97%E8%A1%A8%E6%8E%A5%E5%8F%A3.png) |
+
+### Comment 微服务
+
+| 评论操作接口 | 获取视频评论列表接口 |
+| --- | --- |
+| ![评论操作接口.png](pic/%E8%AF%84%E8%AE%BA%E6%93%8D%E4%BD%9C%E6%8E%A5%E5%8F%A3.png) | ![获取视频评论列表接口.png](pic/%E8%8E%B7%E5%8F%96%E8%A7%86%E9%A2%91%E8%AF%84%E8%AE%BA%E5%88%97%E8%A1%A8%E6%8E%A5%E5%8F%A3.png) |
+
+### Favorite 微服务
+
+| 点赞操作接口 | 获取用户点赞列表接口 |
+| --- | --- |
+| ![点赞操作接口.png](pic/%E7%82%B9%E8%B5%9E%E6%93%8D%E4%BD%9C%E6%8E%A5%E5%8F%A3.png) | ![获取用户点赞列表接口.png](pic/%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E5%88%97%E8%A1%A8%E6%8E%A5%E5%8F%A3.png) |
+
+### Relation 微服务
+
+| 关注操作接口 | 获取关注列表接口 |
+| --- | --- |
+| ![关注操作接口.png](pic/%E5%85%B3%E6%B3%A8%E6%93%8D%E4%BD%9C%E6%8E%A5%E5%8F%A3.png) | ![获取关注列表接口.png](pic/%E8%8E%B7%E5%8F%96%E5%85%B3%E6%B3%A8%E5%88%97%E8%A1%A8%E6%8E%A5%E5%8F%A3.png) |
+
+## 五、存在问题
 
 1. import可以规范一下，官方库一段，剩下的库一段
 
@@ -153,7 +201,7 @@
 
 6. open telemetry本身提供了logger，不用重新封装
 
-# 五、下一步计划
+## 六、下一步计划
 
 1. 检查 自封装的 dlog 包中 callerSkip存在的问题 / 使用 [obs-opentelemetry](https://github.com/kitex-contrib/obs-opentelemetry/tree/main/logging) 提供的 Logger 作为 DefaultLogger
 
