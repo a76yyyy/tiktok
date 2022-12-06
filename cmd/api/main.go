@@ -27,7 +27,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/a76yyyy/tiktok/cmd/api/handlers"
 	"github.com/a76yyyy/tiktok/cmd/api/rpc"
@@ -37,9 +36,7 @@ import (
 
 	// jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/cloudwego/kitex/pkg/klog"
-	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 var (
@@ -61,21 +58,11 @@ func main() {
 	logger := dlog.InitLog()
 	defer logger.Sync()
 
-	zap.ReplaceGlobals(logger)
+	klog.SetLogger(logger)
 
 	Init()
 
 	r := gin.New()
-
-	// Add a ginzap middleware, which:
-	//   - Logs all requests, like a combined access and error log.
-	//   - Logs to stdout.
-	//   - RFC3339 with UTC time format.
-	r.Use(ginzap.Ginzap(zap.L(), time.RFC3339, false))
-
-	// Logs all panic to error log
-	//   - stack means whether output the stack info.
-	r.Use(ginzap.RecoveryWithZap(zap.L(), true))
 
 	douyin := r.Group("/douyin")
 

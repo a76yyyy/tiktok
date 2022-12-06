@@ -28,11 +28,13 @@ import (
 	"fmt"
 	"net/url"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/fsnotify/fsnotify"
+	kitexzap "github.com/kitex-contrib/obs-opentelemetry/logging/zap"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -78,7 +80,7 @@ func (v *Config) SetRemoteConfig(u *url.URL) {
 
 		consul:
 		  url格式为：consul://127.0.0.1:8500/key.json
-		  其中：provider=consul, endpoint=127.0,0.1:8500, path=key.json
+		  其中：provider=consul, endpoint=127.0.0.1:8500, path=key.json
 
 		TODO: consul 的 key name 可以包含 . 吗？
 	*/
@@ -164,7 +166,7 @@ func (v *Config) ZapLogConfig() []byte {
 }
 
 // InitLogger 解析Log配置文件，设置相关参数，最后返回Logger
-func (v *Config) InitLogger() *zap.Logger {
+func (v *Config) InitLogger() *kitexzap.Logger {
 	var cfg zap.Config
 	if err := json.Unmarshal(v.ZapLogConfig(), &cfg); err != nil {
 		panic(err)
@@ -175,10 +177,61 @@ func (v *Config) InitLogger() *zap.Logger {
 	cfg.EncoderConfig.EncodeDuration = zapcore.SecondsDurationEncoder
 	cfg.EncoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
 	cfg.EncoderConfig.EncodeName = zapcore.FullNameEncoder
-	logger, err := cfg.Build()
+
+	errSink, closeOut, err := zap.Open(cfg.ErrorOutputPaths...)
 	if err != nil {
-		panic(err)
+		closeOut()
+		return nil
 	}
+
+	opts := []zap.Option{zap.ErrorOutput(errSink)}
+
+	if cfg.Development {
+		opts = append(opts, zap.Development())
+	}
+
+	if !cfg.DisableCaller {
+		opts = append(opts, zap.AddCaller())
+	}
+
+	stackLevel := zap.ErrorLevel
+	if cfg.Development {
+		stackLevel = zap.WarnLevel
+	}
+	if !cfg.DisableStacktrace {
+		opts = append(opts, zap.AddStacktrace(stackLevel))
+	}
+
+	if scfg := cfg.Sampling; scfg != nil {
+		opts = append(opts, zap.WrapCore(func(core zapcore.Core) zapcore.Core {
+			var samplerOpts []zapcore.SamplerOption
+			if scfg.Hook != nil {
+				samplerOpts = append(samplerOpts, zapcore.SamplerHook(scfg.Hook))
+			}
+			return zapcore.NewSamplerWithOptions(
+				core,
+				time.Second,
+				cfg.Sampling.Initial,
+				cfg.Sampling.Thereafter,
+				samplerOpts...,
+			)
+		}))
+	}
+
+	if len(cfg.InitialFields) > 0 {
+		fs := make([]zap.Field, 0, len(cfg.InitialFields))
+		keys := make([]string, 0, len(cfg.InitialFields))
+		for k := range cfg.InitialFields {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			fs = append(fs, zap.Any(k, cfg.InitialFields[k]))
+		}
+		opts = append(opts, zap.Fields(fs...))
+	}
+
+	logger := kitexzap.NewLogger(kitexzap.WithZapOptions(opts...))
 
 	return logger
 }

@@ -12,47 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package ttviper
 
 /*
 	usage:
-	  - go run main.go --client.foo=baz
-	  - TIKTOK_CLIENT_FOO=baz TIKTOK_CLIENT_ECHO=0 go run main.go
-	  - go run main.go --config <path to config>
+	  - go run config_test.go --client.foo=baz
+	  - TIKTOK_CLIENT_FOO=baz TIKTOK_CLIENT_ECHO=0 go run config_test.go
+	  - go run config_test.go --config <path to config>
 */
 
 import (
 	"fmt"
-
+	"testing"
 	"time"
-
-	"github.com/a76yyyy/tiktok/pkg/dlog"
-	"github.com/a76yyyy/tiktok/pkg/ttviper"
-	_ "github.com/spf13/viper/remote" // enabble viper remote config
 )
 
-func main() {
+func TestConfigInit(t *testing.T) {
+	ConfigInit("TIKTOK", "userConfig")
+}
 
-	config := ttviper.ConfigInit("TIKTOK", "userConfig")
+func TestInitLogger(t *testing.T) {
+	config := ConfigInit("TIKTOK", "logConfig")
 	viper := config.Viper
 
-	logger := dlog.InitLog()
+	logger := config.InitLogger()
 	defer logger.Sync()
 	logger.Info("logger construction succeeded")
-
-	sugar := logger.Sugar()
-	defer sugar.Desugar()
-	sugar.Info("sugar consturction succeeded")
-
-	sugar.Infow("Conf", "Global.Source", viper.GetString("global.source"))
-	// sugar.Errorf("error")
 
 	// where does it from
 	fmt.Printf("Global.Source: '%s'\n", viper.GetString("global.source"))
 	fmt.Printf("Global.ChangeMe: '%s'\n", viper.GetString("Global.ChangeMe"))
 	// prints 'default(viper)'
 	fmt.Printf("viper.GetString(\"Global.Unset\") = '%s'\n", viper.GetString("global.unset"))
-	fmt.Printf("Var GlobalUnset = '%s'\n", *ttviper.GlobalUnset)
+	fmt.Printf("Var GlobalUnset = '%s'\n", *GlobalUnset)
 
 	// from config file
 	fmt.Println("client.servers: ", viper.GetStringSlice("client.servers"))
@@ -67,5 +59,5 @@ func main() {
 	fmt.Println("client.echo:", viper.GetBool("client.echo"))
 
 	// block for watch test
-	time.Sleep(3600 * time.Second)
+	time.Sleep(1 * time.Second)
 }

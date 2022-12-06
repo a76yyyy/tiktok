@@ -32,7 +32,6 @@ import (
 	"github.com/uptrace/opentelemetry-go-extra/otelgorm"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"moul.io/zapgorm2"
 )
 
 var (
@@ -48,7 +47,7 @@ func Init() {
 func InitDB() {
 	var err error
 
-	logger := zapgorm2.New(dlog.InitLog())
+	logger := dlog.NewZapGorm2(dlog.InitLog())
 	logger.SetAsDefault() // optional: configure gorm to use this zapgorm.Logger for callbacks
 
 	viper := Config.Viper
@@ -70,27 +69,27 @@ func InitDB() {
 		},
 	)
 	if err != nil {
-		logger.ZapLogger.Panic(err.Error())
+		logger.ZapLogger.Fatal(err.Error())
 	}
 
 	// gorm open telemetry records database queries and reports DBStats metrics.
 	if err = DB.Use(otelgorm.NewPlugin()); err != nil {
-		logger.ZapLogger.Panic(err.Error())
+		logger.ZapLogger.Fatal(err.Error())
 	}
 
 	// AutoMigrate会创建表，缺失的外键，约束，列和索引。如果大小，精度，是否为空，可以更改，则AutoMigrate会改变列的类型。出于保护您数据的目的，它不会删除未使用的列
 	// 刷新数据库的表格，使其保持最新。即如果我在旧表的基础上增加一个字段age，那么调用autoMigrate后，旧表会自动多出一列age，值为空
 	if err := DB.AutoMigrate(&User{}, &Video{}, &Comment{}, &Relation{}); err != nil {
-		logger.ZapLogger.Panic(err.Error())
+		logger.ZapLogger.Fatal(err.Error())
 	}
 
 	sqlDB, err := DB.DB()
 	if err != nil {
-		logger.ZapLogger.Panic(err.Error())
+		logger.ZapLogger.Fatal(err.Error())
 	}
 
 	if err := sqlDB.Ping(); err != nil {
-		logger.ZapLogger.Panic(err.Error())
+		logger.ZapLogger.Fatal(err.Error())
 	}
 	// SetMaxIdleConns 设置空闲连接池中连接的最大数量
 	sqlDB.SetMaxIdleConns(viper.GetInt("mysql.maxIdleConns"))

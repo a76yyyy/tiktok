@@ -30,21 +30,15 @@ import (
 	"github.com/cloudwego/kitex/pkg/endpoint"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
-	"moul.io/zapgorm2"
 )
 
 var _ endpoint.Middleware = CommonMiddleware
 
-// zapgorm2 is a zap logging driver for gorm v2
 func init() {
-	var logger dlog.ZapLogger = dlog.ZapLogger{
-		Level: klog.LevelInfo,
-	}
+	var logger = dlog.InitLog()
+	defer logger.Sync()
 
-	zaplogger := zapgorm2.New(dlog.InitLog())
-	logger.SugaredLogger.Base = &zaplogger
-
-	klog.SetLogger(&logger)
+	klog.SetLogger(logger)
 }
 
 // CommonMiddleware common middleware print some rpc info、real request and real response
