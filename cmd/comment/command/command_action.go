@@ -26,10 +26,9 @@ package command
 import (
 	"context"
 
+	"github.com/a76yyyy/tiktok/dal/db"
 	"github.com/a76yyyy/tiktok/kitex_gen/comment"
 	"github.com/a76yyyy/tiktok/pkg/errno"
-
-	"github.com/a76yyyy/tiktok/dal/db"
 )
 
 type CommentActionService struct {

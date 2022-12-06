@@ -189,17 +189,15 @@
 
 ## 五、存在问题
 
-1. import可以规范一下，官方库一段，剩下的库一段
+1. actiontype语义化
 
-2. actiontype语义化
+2. 优化一下存储，使用redis缓存
 
-3. 优化一下存储，使用redis缓存
+3. minio不要对外暴露9001端口，容易被攻击
 
-4. minio不要对外暴露9001端口，容易被攻击
+4. pack逻辑存在for循环查询数据库，pack只用于数据打包，不应该出现查库逻辑
 
-5. pack逻辑存在for循环查询数据库，pack只用于数据打包，不应该出现查库逻辑
-
-6. open telemetry本身提供了logger，不用重新封装
+5. open telemetry本身提供了logger，不用重新封装
 
 ## 六、下一步计划
 

@@ -26,9 +26,8 @@ package pack
 import (
 	"context"
 
-	"github.com/a76yyyy/tiktok/kitex_gen/feed"
-
 	"github.com/a76yyyy/tiktok/dal/db"
+	"github.com/a76yyyy/tiktok/kitex_gen/feed"
 )
 
 // FavoriteVideos pack favoriteVideos info.

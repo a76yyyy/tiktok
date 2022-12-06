@@ -27,10 +27,9 @@ import (
 	"context"
 	"errors"
 
+	"github.com/a76yyyy/tiktok/dal/db"
 	"github.com/a76yyyy/tiktok/kitex_gen/user"
 	"gorm.io/gorm"
-
-	"github.com/a76yyyy/tiktok/dal/db"
 )
 
 // User pack user info

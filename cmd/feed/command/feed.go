@@ -27,11 +27,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/a76yyyy/tiktok/dal/pack"
-
-	"github.com/a76yyyy/tiktok/kitex_gen/feed"
-
 	"github.com/a76yyyy/tiktok/dal/db"
+	"github.com/a76yyyy/tiktok/dal/pack"
+	"github.com/a76yyyy/tiktok/kitex_gen/feed"
 )
 
 const (

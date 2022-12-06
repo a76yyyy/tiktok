@@ -26,11 +26,10 @@ package command
 import (
 	"context"
 
+	"github.com/a76yyyy/tiktok/dal/db"
 	"github.com/a76yyyy/tiktok/dal/pack"
 	"github.com/a76yyyy/tiktok/kitex_gen/relation"
 	"github.com/a76yyyy/tiktok/kitex_gen/user"
-
-	"github.com/a76yyyy/tiktok/dal/db"
 )
 
 type FollowingListService struct {

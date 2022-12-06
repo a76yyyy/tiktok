@@ -31,15 +31,15 @@ import (
 
 	"github.com/a76yyyy/tiktok/cmd/api/handlers"
 	"github.com/a76yyyy/tiktok/cmd/api/rpc"
-	"go.uber.org/zap"
-
-	// jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/a76yyyy/tiktok/pkg/dlog"
 	"github.com/a76yyyy/tiktok/pkg/jwt"
 	"github.com/a76yyyy/tiktok/pkg/ttviper"
+
+	// jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/cloudwego/kitex/pkg/klog"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 var (

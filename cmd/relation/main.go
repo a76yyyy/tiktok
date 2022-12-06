@@ -30,21 +30,18 @@ import (
 
 	etcd "github.com/a76yyyy/registry-etcd"
 	"github.com/a76yyyy/tiktok/dal"
-	"github.com/cloudwego/kitex/pkg/klog"
-	"moul.io/zapgorm2"
-
 	relation "github.com/a76yyyy/tiktok/kitex_gen/relation/relationsrv"
 	"github.com/a76yyyy/tiktok/pkg/dlog"
 	"github.com/a76yyyy/tiktok/pkg/jwt"
 	"github.com/a76yyyy/tiktok/pkg/middleware"
 	"github.com/a76yyyy/tiktok/pkg/ttviper"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
-
 	"github.com/cloudwego/kitex/server"
-
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
+	"moul.io/zapgorm2"
 )
 
 var (

@@ -27,10 +27,9 @@ import (
 	"context"
 	"errors"
 
+	"github.com/a76yyyy/tiktok/dal/db"
 	"github.com/a76yyyy/tiktok/kitex_gen/comment"
 	"gorm.io/gorm"
-
-	"github.com/a76yyyy/tiktok/dal/db"
 )
 
 // Comment pack Comments info.

@@ -24,10 +24,8 @@
 package jwt
 
 import (
-	"github.com/a76yyyy/errors"
-
 	code "github.com/a76yyyy/ErrnoCode"
-
+	"github.com/a76yyyy/errors"
 	"github.com/golang-jwt/jwt"
 )
 

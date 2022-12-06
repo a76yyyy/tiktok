@@ -27,10 +27,9 @@ import (
 	"context"
 	"errors"
 
+	"github.com/a76yyyy/tiktok/dal/db"
 	"github.com/a76yyyy/tiktok/kitex_gen/feed"
 	"gorm.io/gorm"
-
-	"github.com/a76yyyy/tiktok/dal/db"
 )
 
 // Video pack feed info

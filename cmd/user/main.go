@@ -28,9 +28,6 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/cloudwego/kitex/pkg/klog"
-	"moul.io/zapgorm2"
-
 	etcd "github.com/a76yyyy/registry-etcd"
 	"github.com/a76yyyy/tiktok/cmd/user/command"
 	"github.com/a76yyyy/tiktok/dal"
@@ -39,13 +36,13 @@ import (
 	"github.com/a76yyyy/tiktok/pkg/jwt"
 	"github.com/a76yyyy/tiktok/pkg/middleware"
 	"github.com/a76yyyy/tiktok/pkg/ttviper"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
-
 	"github.com/cloudwego/kitex/server"
-
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
+	"moul.io/zapgorm2"
 )
 
 var (

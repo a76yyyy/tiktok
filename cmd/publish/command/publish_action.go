@@ -32,14 +32,11 @@ import (
 	"os"
 	"strings"
 
+	"github.com/a76yyyy/tiktok/dal/db"
 	"github.com/a76yyyy/tiktok/kitex_gen/publish"
 	"github.com/a76yyyy/tiktok/pkg/minio"
 	"github.com/a76yyyy/tiktok/pkg/ttviper"
-
-	"github.com/a76yyyy/tiktok/dal/db"
-
 	"github.com/gofrs/uuid"
-
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
