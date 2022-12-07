@@ -22,7 +22,6 @@ package ttviper
 */
 
 import (
-	"fmt"
 	"testing"
 	"time"
 )
@@ -40,23 +39,23 @@ func TestInitLogger(t *testing.T) {
 	logger.Info("logger construction succeeded")
 
 	// where does it from
-	fmt.Printf("Global.Source: '%s'\n", viper.GetString("global.source"))
-	fmt.Printf("Global.ChangeMe: '%s'\n", viper.GetString("Global.ChangeMe"))
+	logger.Infof("Global.Source: '%s'", viper.GetString("global.source"))
+	logger.Infof("Global.ChangeMe: '%s'", viper.GetString("Global.ChangeMe"))
 	// prints 'default(viper)'
-	fmt.Printf("viper.GetString(\"Global.Unset\") = '%s'\n", viper.GetString("global.unset"))
-	fmt.Printf("Var GlobalUnset = '%s'\n", *GlobalUnset)
+	logger.Infof("viper.GetString(\"Global.Unset\") = '%s'", viper.GetString("global.unset"))
+	logger.Infof("Var GlobalUnset = '%s'", *GlobalUnset)
 
 	// from config file
-	fmt.Println("client.servers: ", viper.GetStringSlice("client.servers"))
-	fmt.Println("Server.Address: ", viper.GetString("Server.Address"))
+	logger.Info("client.servers: ", viper.GetStringSlice("client.servers"))
+	logger.Info("Server.Address: ", viper.GetString("Server.Address"))
 	// it can be changed... but when to do that?
 	viper.Set("Server.Address", "0.0.0.0")
 	// case *insensitive*
-	fmt.Println("Server.Address: ", viper.GetString("server.address"))
+	logger.Info("Server.Address: ", viper.GetString("server.address"))
 
 	// from env
-	fmt.Println("client.foo:", viper.GetString("client.foo"))
-	fmt.Println("client.echo:", viper.GetBool("client.echo"))
+	logger.Info("client.foo:", viper.GetString("client.foo"))
+	logger.Info("client.echo:", viper.GetBool("client.echo"))
 
 	// block for watch test
 	time.Sleep(1 * time.Second)

@@ -53,7 +53,7 @@ func CommonMiddleware(next endpoint.Endpoint) endpoint.Endpoint {
 			return err
 		}
 		// get real response
-		klog.Infof("real response: %+v\n", resp)
+		klog.Infof("real response: %+v", resp)
 		return nil
 	}
 }

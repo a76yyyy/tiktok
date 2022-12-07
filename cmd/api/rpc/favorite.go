@@ -43,7 +43,7 @@ import (
 
 var favoriteClient favoritesrv.Client
 
-//  Favorite RPC 客户端初始化
+// Favorite RPC 客户端初始化
 func initFavoriteRpc(Config *ttviper.Config) {
 	EtcdAddress := fmt.Sprintf("%s:%d", Config.Viper.GetString("Etcd.Address"), Config.Viper.GetInt("Etcd.Port"))
 	r, err := etcd.NewEtcdResolver([]string{EtcdAddress})
