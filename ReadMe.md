@@ -197,22 +197,18 @@
 
 4. pack逻辑存在for循环查询数据库，pack只用于数据打包，不应该出现查库逻辑
 
-5. open telemetry本身提供了logger，不用重新封装
-
 ## 六、下一步计划
 
-1. 检查 自封装的 dlog 包中 callerSkip存在的问题 / 使用 [obs-opentelemetry](https://github.com/kitex-contrib/obs-opentelemetry/tree/main/logging) 提供的 Logger 作为 DefaultLogger
+1. DAL 层优化 `for` 循环内的 db 查询
 
-2. DAL 层优化 `for` 循环内的 db 查询
+2. 使用 Jaeger 实现链路跟踪可视化
 
-3. 使用 Jaeger 实现链路跟踪可视化
+3. 添加 RPC微服务 Handler 部分的单元测试内容
 
-4. 添加 RPC微服务 Handler 部分的单元测试内容
+4. 编写 DockerFile 实现分布式容器部署
 
-5. 编写 DockerFile 实现分布式容器部署
+5. 采用 Redis 作为 NoSQL 缓存，优化 JWT 鉴权，结合消息队列和 Redis 实现对定时更新 Token、各种操作数据 的缓存和持久性存储
 
-6. 采用 Redis 作为 NoSQL 缓存，优化 JWT 鉴权，结合消息队列和 Redis 实现对定时更新 Token、各种操作数据 的缓存和持久性存储
+6. 使用 Hertz 替换 Gin, 提高 HTTP 层的性能和可扩展性
 
-7. 使用 Hertz 替换 Gin, 提高 HTTP 层的性能和可扩展性
-
-8. 实现分库分表
+7. 实现分库分表

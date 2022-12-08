@@ -41,7 +41,6 @@ import (
 	"github.com/cloudwego/kitex/server"
 	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
-	"moul.io/zapgorm2"
 )
 
 var (
@@ -60,16 +59,10 @@ func Init() {
 
 // Publish RPC Server 端运行
 func main() {
-	var logger dlog.ZapLogger = dlog.ZapLogger{
-		Level: klog.LevelInfo,
-	}
+	var logger = dlog.InitLog(3)
+	defer logger.Sync()
 
-	zaplogger := zapgorm2.New(dlog.InitLog())
-	logger.SugaredLogger.Base = &zaplogger
-
-	klog.SetLogger(&logger)
-
-	defer logger.SugaredLogger.Base.ZapLogger.Sync()
+	klog.SetLogger(logger)
 
 	r, err := etcd.NewEtcdRegistry([]string{EtcdAddress})
 	if err != nil {

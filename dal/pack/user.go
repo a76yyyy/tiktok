@@ -42,7 +42,6 @@ func User(ctx context.Context, u *db.User, fromID int64) (*user.User, error) {
 		}, nil
 	}
 
-	// follow_count := int64(u.FollowerCount),笔误
 	follow_count := int64(u.FollowingCount)
 	follower_count := int64(u.FollowerCount)
 

@@ -26,11 +26,17 @@ package dlog
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"io"
+	"sort"
+	"time"
 
 	"github.com/a76yyyy/tiktok/pkg/ttviper"
 	"github.com/cloudwego/kitex/pkg/klog"
+	kitexzap "github.com/kitex-contrib/obs-opentelemetry/logging/zap"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 var (
@@ -39,8 +45,86 @@ var (
 )
 
 // Init Logger config
-func InitLog() *zap.Logger {
-	return config.InitLogger()
+func InitLog(callerSkip int) *kitexzap.Logger {
+	var cfg zap.Config
+	if err := json.Unmarshal(config.ZapLogConfig(), &cfg); err != nil {
+		panic(err)
+	}
+
+	enc, err := newEncoder(cfg.Encoding, cfg.EncoderConfig)
+	if err != nil {
+		panic(err)
+	}
+
+	if cfg.Level == (zap.AtomicLevel{}) {
+		panic(errors.New("missing Level"))
+	}
+
+	sink, closeOut, err := zap.Open(cfg.OutputPaths...)
+	if err != nil {
+		klog.Error(err)
+		return nil
+	}
+
+	errSink, _, err := zap.Open(cfg.ErrorOutputPaths...)
+	if err != nil {
+		closeOut()
+		klog.Error(err)
+		return nil
+	}
+
+	opts := []zap.Option{zap.ErrorOutput(errSink)}
+
+	if cfg.Development {
+		opts = append(opts, zap.Development())
+	}
+
+	if !cfg.DisableCaller {
+		opts = append(opts, zap.AddCaller())
+	}
+
+	stackLevel := zap.ErrorLevel
+	if cfg.Development {
+		stackLevel = zap.WarnLevel
+	}
+	if !cfg.DisableStacktrace {
+		opts = append(opts, zap.AddStacktrace(stackLevel))
+	}
+
+	if scfg := cfg.Sampling; scfg != nil {
+		opts = append(opts, zap.WrapCore(func(core zapcore.Core) zapcore.Core {
+			var samplerOpts []zapcore.SamplerOption
+			if scfg.Hook != nil {
+				samplerOpts = append(samplerOpts, zapcore.SamplerHook(scfg.Hook))
+			}
+			return zapcore.NewSamplerWithOptions(
+				core,
+				time.Second,
+				cfg.Sampling.Initial,
+				cfg.Sampling.Thereafter,
+				samplerOpts...,
+			)
+		}))
+	}
+
+	if len(cfg.InitialFields) > 0 {
+		fs := make([]zap.Field, 0, len(cfg.InitialFields))
+		keys := make([]string, 0, len(cfg.InitialFields))
+		for k := range cfg.InitialFields {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			fs = append(fs, zap.Any(k, cfg.InitialFields[k]))
+		}
+		opts = append(opts, zap.Fields(fs...))
+	}
+
+	opts = append(opts, zap.AddCallerSkip(callerSkip))
+
+	logger := kitexzap.NewLogger(kitexzap.WithCoreEnc(enc), kitexzap.WithCoreWs(sink), kitexzap.WithCoreLevel(cfg.Level), kitexzap.WithZapOptions(opts...))
+
+	return logger
 }
 
 // SetOutput sets the output of default logger. By default, it is stderr.
@@ -158,131 +242,4 @@ func CtxDebugf(ctx context.Context, format string, v ...any) {
 // CtxTracef calls the default logger's CtxTracef method.
 func CtxTracef(ctx context.Context, format string, v ...any) {
 	logger.CtxTracef(ctx, format, v...)
-}
-
-// *********************** zap based logger *******************************
-// ************************************************************************
-
-type ZapLogger struct {
-	SugaredLogger
-	Level klog.Level
-}
-
-/**
-	Control
-**/
-func (ll *ZapLogger) SetOutput(w io.Writer) {
-}
-
-func (ll *ZapLogger) SetLevel(lv klog.Level) {
-	ll.Level = lv
-}
-
-/**
-	Logger
-**/
-// func (ll *ZapLogger) Fatal(v ...any) {
-// 	ll.Fatal(v...)
-// }
-
-// func (ll *ZapLogger) Error(v ...any) {
-// 	ll.Error(v...)
-// }
-
-// func (ll *ZapLogger) Warn(v ...any) {
-// 	ll.Warn(v...)
-// }
-
-// func (ll *ZapLogger) Notice(v ...any) {
-// 	ll.DPanic(v...)
-// }
-
-func (s *SugaredLogger) Notice(args ...interface{}) {
-	s.log(zap.DPanicLevel, "", args, nil)
-}
-
-// func (ll *ZapLogger) Info(v ...any) {
-// 	ll.Info(v...)
-// }
-
-// func (ll *ZapLogger) Debug(v ...any) {
-// 	ll.Debug(v...)
-// }
-
-// func (ll *ZapLogger) Trace(v ...any) {
-// 	ll.Info(v...)
-// }
-
-func (s *SugaredLogger) Trace(args ...interface{}) {
-	s.log(zap.InfoLevel, "", args, nil)
-}
-
-// /**
-// 	FormatLogger
-// **/
-// func (ll *ZapLogger) Fatalf(format string, v ...any) {
-// 	ll.Fatalf(format, v...)
-// }
-
-// func (ll *ZapLogger) Errorf(format string, v ...any) {
-// 	ll.Errorf(format, v...)
-// }
-
-// func (ll *ZapLogger) Warnf(format string, v ...any) {
-// 	ll.Warnf(format, v...)
-// }
-
-// func (ll *ZapLogger) Noticef(format string, v ...any) {
-// 	ll.DPanicf(format, v...)
-// }
-
-func (s *SugaredLogger) Noticef(template string, args ...interface{}) {
-	s.log(zap.DPanicLevel, template, args, nil)
-}
-
-// func (ll *ZapLogger) Infof(format string, v ...any) {
-// 	ll.Infof(format, v...)
-// }
-
-// func (ll *ZapLogger) Debugf(format string, v ...any) {
-// 	ll.Debugf(format, v...)
-// }
-
-// func (ll *ZapLogger) Tracef(format string, v ...any) {
-// 	ll.Infof(format, v...)
-// }
-
-func (s *SugaredLogger) Tracef(template string, args ...interface{}) {
-	s.log(zap.InfoLevel, template, args, nil)
-}
-
-/**
-	CtxLogger
-**/
-func (ll *ZapLogger) CtxFatalf(ctx context.Context, format string, v ...any) {
-	ll.With("ctx", ctx).Fatalw(format, v...)
-}
-
-func (ll *ZapLogger) CtxErrorf(ctx context.Context, format string, v ...any) {
-	ll.With("ctx", ctx).Errorw(format, v...)
-}
-
-func (ll *ZapLogger) CtxWarnf(ctx context.Context, format string, v ...any) {
-	ll.With("ctx", ctx).Warnw(format, v...)
-}
-
-func (ll *ZapLogger) CtxNoticef(ctx context.Context, format string, v ...any) {
-	ll.With("ctx", ctx).DPanicw(format, v...)
-}
-
-func (ll *ZapLogger) CtxInfof(ctx context.Context, format string, v ...any) {
-	ll.With("ctx", ctx).Infow(format, v...)
-}
-
-func (ll *ZapLogger) CtxDebugf(ctx context.Context, format string, v ...any) {
-	ll.With("ctx", ctx).Debugw(format, v...)
-}
-
-func (ll *ZapLogger) CtxTracef(ctx context.Context, format string, v ...any) {
-	ll.With("ctx", ctx).Infow(format, v...)
 }
