@@ -74,19 +74,19 @@ func (l ZapGorm2Logger) Trace(ctx context.Context, begin time.Time, fc func() (s
 	switch {
 	case err != nil && l.LogLevel >= gormlogger.Error && (!l.IgnoreRecordNotFoundError || !errors.Is(err, gorm.ErrRecordNotFound)):
 		sql, rows := fc()
-		l.logger().CtxErrorf(ctx, "trace Error: '%+v', Elapsed: '%+v', Rows: '%+v', Sql: '%+v'", err, elapsed, rows, sql)
+		l.logger().CtxErrorf(ctx, "Trace Error: '%+v', Elapsed: %+v, Rows: %+v, SQL: '%+v'", err, elapsed, rows, sql)
 	case l.SlowThreshold != 0 && elapsed > l.SlowThreshold && l.LogLevel >= gormlogger.Warn:
 		sql, rows := fc()
-		l.logger().CtxWarnf(ctx, "trace Elapsed: '%+v', Rows: '%+v', Sql: '%+v'", elapsed, rows, sql)
+		l.logger().CtxWarnf(ctx, "Trace Elapsed: %+v, Rows: %+v, SQL: '%+v'", elapsed, rows, sql)
 	case l.LogLevel >= gormlogger.Info:
 		sql, rows := fc()
-		l.logger().CtxDebugf(ctx, "trace Elapsed: '%+v', Rows: '%+v', Sql: '%+v'", elapsed, rows, sql)
+		l.logger().CtxDebugf(ctx, "Trace Elapsed: %+v, Rows: %+v, SQL: '%+v'", elapsed, rows, sql)
 	}
 }
 
 var (
 	gormPackage    = filepath.Join("gorm.io", "gorm")
-	zapgormPackage = filepath.Join("moul.io", "zapgorm2")
+	zapgormPackage = filepath.Join("dlog", "zapgorm2")
 )
 
 func (l ZapGorm2Logger) logger() *kitexzap.Logger {

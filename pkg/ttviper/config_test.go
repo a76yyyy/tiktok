@@ -23,40 +23,8 @@ package ttviper
 
 import (
 	"testing"
-	"time"
 )
 
 func TestConfigInit(t *testing.T) {
 	ConfigInit("TIKTOK", "userConfig")
-}
-
-func TestInitLogger(t *testing.T) {
-	config := ConfigInit("TIKTOK", "logConfig")
-	viper := config.Viper
-
-	logger := config.InitLogger(2)
-	defer logger.Sync()
-	logger.Info("logger construction succeeded")
-
-	// where does it from
-	logger.Infof("Global.Source: '%s'", viper.GetString("global.source"))
-	logger.Infof("Global.ChangeMe: '%s'", viper.GetString("Global.ChangeMe"))
-	// prints 'default(viper)'
-	logger.Infof("viper.GetString(\"Global.Unset\") = '%s'", viper.GetString("global.unset"))
-	logger.Infof("Var GlobalUnset = '%s'", *GlobalUnset)
-
-	// from config file
-	logger.Info("client.servers: ", viper.GetStringSlice("client.servers"))
-	logger.Info("Server.Address: ", viper.GetString("Server.Address"))
-	// it can be changed... but when to do that?
-	viper.Set("Server.Address", "0.0.0.0")
-	// case *insensitive*
-	logger.Info("Server.Address: ", viper.GetString("server.address"))
-
-	// from env
-	logger.Info("client.foo:", viper.GetString("client.foo"))
-	logger.Info("client.echo:", viper.GetBool("client.echo"))
-
-	// block for watch test
-	time.Sleep(1 * time.Second)
 }

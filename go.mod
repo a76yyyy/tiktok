@@ -16,6 +16,7 @@ require (
 	github.com/minio/minio-go/v7 v7.0.45
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.14.0
+	github.com/stretchr/testify v1.8.1
 	github.com/u2takey/ffmpeg-go v0.4.1
 	github.com/uptrace/opentelemetry-go-extra/otelgorm v0.1.17
 	go.uber.org/zap v1.24.0
@@ -38,6 +39,7 @@ require (
 	github.com/cloudwego/thriftgo v0.2.1 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd/v22 v22.3.2 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
@@ -72,6 +74,7 @@ require (
 	github.com/oleiade/lane v1.0.1 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rs/xid v1.4.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/spf13/afero v1.9.2 // indirect

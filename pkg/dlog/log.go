@@ -26,11 +26,17 @@ package dlog
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"io"
+	"sort"
+	"time"
 
 	"github.com/a76yyyy/tiktok/pkg/ttviper"
 	"github.com/cloudwego/kitex/pkg/klog"
 	kitexzap "github.com/kitex-contrib/obs-opentelemetry/logging/zap"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 var (
@@ -40,7 +46,85 @@ var (
 
 // Init Logger config
 func InitLog(callerSkip int) *kitexzap.Logger {
-	return config.InitLogger(callerSkip)
+	var cfg zap.Config
+	if err := json.Unmarshal(config.ZapLogConfig(), &cfg); err != nil {
+		panic(err)
+	}
+
+	enc, err := newEncoder(cfg.Encoding, cfg.EncoderConfig)
+	if err != nil {
+		panic(err)
+	}
+
+	if cfg.Level == (zap.AtomicLevel{}) {
+		panic(errors.New("missing Level"))
+	}
+
+	sink, closeOut, err := zap.Open(cfg.OutputPaths...)
+	if err != nil {
+		klog.Error(err)
+		return nil
+	}
+
+	errSink, _, err := zap.Open(cfg.ErrorOutputPaths...)
+	if err != nil {
+		closeOut()
+		klog.Error(err)
+		return nil
+	}
+
+	opts := []zap.Option{zap.ErrorOutput(errSink)}
+
+	if cfg.Development {
+		opts = append(opts, zap.Development())
+	}
+
+	if !cfg.DisableCaller {
+		opts = append(opts, zap.AddCaller())
+	}
+
+	stackLevel := zap.ErrorLevel
+	if cfg.Development {
+		stackLevel = zap.WarnLevel
+	}
+	if !cfg.DisableStacktrace {
+		opts = append(opts, zap.AddStacktrace(stackLevel))
+	}
+
+	if scfg := cfg.Sampling; scfg != nil {
+		opts = append(opts, zap.WrapCore(func(core zapcore.Core) zapcore.Core {
+			var samplerOpts []zapcore.SamplerOption
+			if scfg.Hook != nil {
+				samplerOpts = append(samplerOpts, zapcore.SamplerHook(scfg.Hook))
+			}
+			return zapcore.NewSamplerWithOptions(
+				core,
+				time.Second,
+				cfg.Sampling.Initial,
+				cfg.Sampling.Thereafter,
+				samplerOpts...,
+			)
+		}))
+	}
+
+	if len(cfg.InitialFields) > 0 {
+		fs := make([]zap.Field, 0, len(cfg.InitialFields))
+		keys := make([]string, 0, len(cfg.InitialFields))
+		for k := range cfg.InitialFields {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			fs = append(fs, zap.Any(k, cfg.InitialFields[k]))
+		}
+		opts = append(opts, zap.Fields(fs...))
+	}
+
+	opts = append(opts, zap.AddCallerSkip(callerSkip))
+
+	logger := kitexzap.NewLogger(kitexzap.WithCoreEnc(enc), kitexzap.WithCoreWs(sink), kitexzap.WithCoreLevel(cfg.Level), kitexzap.WithZapOptions(opts...))
+
+	return logger
 }
 
 // SetOutput sets the output of default logger. By default, it is stderr.
