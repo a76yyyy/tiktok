@@ -119,7 +119,7 @@ func (v *Config) SetRemoteConfig(u *url.URL) {
 	// .yaml ==> yaml
 	configType := ext[1:]
 
-	klog.Infof("Using Remote Config Provider: '%s', Endpoint: '%s', Path: '%s', ConfigType: '%s'\n", provider, endpoint, path, configType)
+	klog.Infof("Using Remote Config Provider: '%s', Endpoint: '%s', Path: '%s', ConfigType: '%s'", provider, endpoint, path, configType)
 	if err := v.Viper.AddRemoteProvider(provider, endpoint, path); err != nil {
 		klog.Fatalf("error adding remote provider %s", err)
 	}
@@ -142,7 +142,7 @@ func (v *Config) WatchRemoteConf() {
 		// currently, only tested with etcd support
 		err := v.Viper.WatchRemoteConfig()
 		if err != nil {
-			klog.Errorf("unable to read remote config: %v\n", err)
+			klog.Errorf("unable to read remote config: %v", err)
 			continue
 		}
 
@@ -150,8 +150,8 @@ func (v *Config) WatchRemoteConf() {
 		// to implement a signal to notify the system of the changes
 		// runtime_viper.Unmarshal(&runtime_conf)
 		klog.Info("Watching Remote Config")
-		klog.Infof("Global.Source: '%s'\n", v.Viper.GetString("Global.Source"))
-		klog.Infof("Global.ChangeMe: '%s'\n", v.Viper.GetString("Global.ChangeMe"))
+		klog.Infof("Global.Source: '%s'", v.Viper.GetString("Global.Source"))
+		klog.Infof("Global.ChangeMe: '%s'", v.Viper.GetString("Global.ChangeMe"))
 	}
 }
 
@@ -166,7 +166,7 @@ func (v *Config) ZapLogConfig() []byte {
 }
 
 // InitLogger 解析Log配置文件，设置相关参数，最后返回Logger
-func (v *Config) InitLogger() *kitexzap.Logger {
+func (v *Config) InitLogger(callerSkip int) *kitexzap.Logger {
 	var cfg zap.Config
 	if err := json.Unmarshal(v.ZapLogConfig(), &cfg); err != nil {
 		panic(err)
@@ -231,7 +231,7 @@ func (v *Config) InitLogger() *kitexzap.Logger {
 		opts = append(opts, zap.Fields(fs...))
 	}
 
-	opts = append(opts, zap.AddCallerSkip(3))
+	opts = append(opts, zap.AddCallerSkip(callerSkip))
 
 	logger := kitexzap.NewLogger(kitexzap.WithZapOptions(opts...))
 
@@ -298,7 +298,7 @@ func ConfigInit(envPrefix string, cfgName string) Config {
 		if err := viper.ReadRemoteConfig(); err != nil {
 			klog.Fatalf("error reading config: %s", err)
 		}
-		klog.Infof("Using Remote Config: '%s'\n", configVar)
+		klog.Infof("Using Remote Config: '%s'", configVar)
 
 		viper.WatchRemoteConfig()
 		// 另启动一个协程来监测远程配置文件
@@ -308,7 +308,7 @@ func ConfigInit(envPrefix string, cfgName string) Config {
 		if err := viper.ReadInConfig(); err != nil {
 			klog.Fatalf("error reading config: %s", err)
 		}
-		klog.Infof("Using configuration file '%s'\n", viper.ConfigFileUsed())
+		klog.Infof("Using configuration file '%s'", viper.ConfigFileUsed())
 
 		viper.WatchConfig()
 		viper.OnConfigChange(func(e fsnotify.Event) {

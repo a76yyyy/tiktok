@@ -9,7 +9,6 @@ import (
 	"time"
 
 	kitexzap "github.com/kitex-contrib/obs-opentelemetry/logging/zap"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 	gormlogger "gorm.io/gorm/logger"
 )
@@ -50,21 +49,21 @@ func (l ZapGorm2Logger) Info(ctx context.Context, str string, args ...interface{
 	if l.LogLevel < gormlogger.Info {
 		return
 	}
-	l.logger().Debugf(str, args...)
+	l.logger().CtxDebugf(ctx, str, args...)
 }
 
 func (l ZapGorm2Logger) Warn(ctx context.Context, str string, args ...interface{}) {
 	if l.LogLevel < gormlogger.Warn {
 		return
 	}
-	l.logger().Warnf(str, args...)
+	l.logger().CtxWarnf(ctx, str, args...)
 }
 
 func (l ZapGorm2Logger) Error(ctx context.Context, str string, args ...interface{}) {
 	if l.LogLevel < gormlogger.Error {
 		return
 	}
-	l.logger().Errorf(str, args...)
+	l.logger().CtxErrorf(ctx, str, args...)
 }
 
 func (l ZapGorm2Logger) Trace(ctx context.Context, begin time.Time, fc func() (string, int64), err error) {
@@ -75,13 +74,13 @@ func (l ZapGorm2Logger) Trace(ctx context.Context, begin time.Time, fc func() (s
 	switch {
 	case err != nil && l.LogLevel >= gormlogger.Error && (!l.IgnoreRecordNotFoundError || !errors.Is(err, gorm.ErrRecordNotFound)):
 		sql, rows := fc()
-		l.logger().Error("trace", zap.Error(err), zap.Duration("elapsed", elapsed), zap.Int64("rows", rows), zap.String("sql", sql))
+		l.logger().CtxErrorf(ctx, "trace Error: '%+v', Elapsed: '%+v', Rows: '%+v', Sql: '%+v'", err, elapsed, rows, sql)
 	case l.SlowThreshold != 0 && elapsed > l.SlowThreshold && l.LogLevel >= gormlogger.Warn:
 		sql, rows := fc()
-		l.logger().Warn("trace", zap.Duration("elapsed", elapsed), zap.Int64("rows", rows), zap.String("sql", sql))
+		l.logger().CtxWarnf(ctx, "trace Elapsed: '%+v', Rows: '%+v', Sql: '%+v'", elapsed, rows, sql)
 	case l.LogLevel >= gormlogger.Info:
 		sql, rows := fc()
-		l.logger().Debug("trace", zap.Duration("elapsed", elapsed), zap.Int64("rows", rows), zap.String("sql", sql))
+		l.logger().CtxDebugf(ctx, "trace Elapsed: '%+v', Rows: '%+v', Sql: '%+v'", elapsed, rows, sql)
 	}
 }
 

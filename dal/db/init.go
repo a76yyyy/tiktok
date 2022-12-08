@@ -47,7 +47,7 @@ func Init() {
 func InitDB() {
 	var err error
 
-	logger := dlog.NewZapGorm2(dlog.InitLog())
+	logger := dlog.NewZapGorm2(dlog.InitLog(3))
 	logger.SetAsDefault() // optional: configure gorm to use this zapgorm.Logger for callbacks
 
 	viper := Config.Viper

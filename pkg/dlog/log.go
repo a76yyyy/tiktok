@@ -39,8 +39,8 @@ var (
 )
 
 // Init Logger config
-func InitLog() *kitexzap.Logger {
-	return config.InitLogger()
+func InitLog(callerSkip int) *kitexzap.Logger {
+	return config.InitLogger(callerSkip)
 }
 
 // SetOutput sets the output of default logger. By default, it is stderr.

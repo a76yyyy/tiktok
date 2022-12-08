@@ -35,7 +35,7 @@ import (
 var _ endpoint.Middleware = CommonMiddleware
 
 func init() {
-	var logger = dlog.InitLog()
+	var logger = dlog.InitLog(3)
 	defer logger.Sync()
 
 	klog.SetLogger(logger)

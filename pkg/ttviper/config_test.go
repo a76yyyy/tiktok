@@ -34,7 +34,7 @@ func TestInitLogger(t *testing.T) {
 	config := ConfigInit("TIKTOK", "logConfig")
 	viper := config.Viper
 
-	logger := config.InitLogger()
+	logger := config.InitLogger(2)
 	defer logger.Sync()
 	logger.Info("logger construction succeeded")
 

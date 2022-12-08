@@ -55,7 +55,7 @@ func Init() {
 
 // 初始化 GIN API 及 Router
 func main() {
-	logger := dlog.InitLog()
+	logger := dlog.InitLog(3)
 	defer logger.Sync()
 
 	klog.SetLogger(logger)

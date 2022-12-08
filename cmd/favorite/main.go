@@ -59,7 +59,7 @@ func Init() {
 
 // Favorite RPC Server 端运行
 func main() {
-	var logger = dlog.InitLog()
+	var logger = dlog.InitLog(3)
 	defer logger.Sync()
 
 	klog.SetLogger(logger)
