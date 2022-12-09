@@ -31,11 +31,11 @@ import (
 	"github.com/a76yyyy/tiktok/dal/pack"
 	"github.com/a76yyyy/tiktok/kitex_gen/favorite"
 	"github.com/a76yyyy/tiktok/pkg/errno"
-	"github.com/gin-gonic/gin"
+	"github.com/cloudwego/hertz/pkg/app"
 )
 
 // 传递 点赞操作 的上下文至 Favorite 服务的 RPC 客户端, 并获取相应的响应.
-func FavoriteAction(c *gin.Context) {
+func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 	var paramVar FavoriteActionParam
 	token := c.Query("token")
 	video_id := c.Query("video_id")
@@ -56,7 +56,7 @@ func FavoriteAction(c *gin.Context) {
 	paramVar.VideoId = int64(vid)
 	paramVar.ActionType = int32(act)
 
-	resp, err := rpc.FavoriteAction(context.Background(), &favorite.DouyinFavoriteActionRequest{
+	resp, err := rpc.FavoriteAction(ctx, &favorite.DouyinFavoriteActionRequest{
 		VideoId:    paramVar.VideoId,
 		Token:      paramVar.Token,
 		ActionType: paramVar.ActionType,
@@ -69,7 +69,7 @@ func FavoriteAction(c *gin.Context) {
 }
 
 // 传递 获取点赞列表操作 的上下文至 Favorite 服务的 RPC 客户端, 并获取相应的响应.
-func FavoriteList(c *gin.Context) {
+func FavoriteList(ctx context.Context, c *app.RequestContext) {
 	var paramVar UserParam
 	userid, err := strconv.Atoi(c.Query("user_id"))
 	if err != nil {
@@ -84,7 +84,7 @@ func FavoriteList(c *gin.Context) {
 		return
 	}
 
-	resp, err := rpc.FavoriteList(context.Background(), &favorite.DouyinFavoriteListRequest{
+	resp, err := rpc.FavoriteList(ctx, &favorite.DouyinFavoriteListRequest{
 		UserId: paramVar.UserId,
 		Token:  paramVar.Token,
 	})

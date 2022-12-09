@@ -31,11 +31,11 @@ import (
 	"github.com/a76yyyy/tiktok/dal/pack"
 	"github.com/a76yyyy/tiktok/kitex_gen/comment"
 	"github.com/a76yyyy/tiktok/pkg/errno"
-	"github.com/gin-gonic/gin"
+	"github.com/cloudwego/hertz/pkg/app"
 )
 
 // 传递 评论操作 的上下文至 Comment 服务的 RPC 客户端, 并获取相应的响应.
-func CommentAction(c *gin.Context) {
+func CommentAction(ctx context.Context, c *app.RequestContext) {
 	var paramVar CommentActionParam
 	token := c.Query("token")
 	video_id := c.Query("video_id")
@@ -76,7 +76,7 @@ func CommentAction(c *gin.Context) {
 		rpcReq.CommentId = &cid64
 	}
 
-	resp, err := rpc.CommentAction(context.Background(), &rpcReq)
+	resp, err := rpc.CommentAction(ctx, &rpcReq)
 	if err != nil {
 		SendResponse(c, pack.BuildCommentActionResp(errno.ConvertErr(err)))
 		return
@@ -85,7 +85,7 @@ func CommentAction(c *gin.Context) {
 }
 
 // 传递 获取评论列表操作 的上下文至 Comment 服务的 RPC 客户端, 并获取相应的响应.
-func CommentList(c *gin.Context) {
+func CommentList(ctx context.Context, c *app.RequestContext) {
 	var paramVar CommentListParam
 	videoid, err := strconv.Atoi(c.Query("video_id"))
 	if err != nil {
@@ -100,7 +100,7 @@ func CommentList(c *gin.Context) {
 		return
 	}
 
-	resp, err := rpc.CommentList(context.Background(), &comment.DouyinCommentListRequest{
+	resp, err := rpc.CommentList(ctx, &comment.DouyinCommentListRequest{
 		VideoId: paramVar.VideoId,
 		Token:   paramVar.Token,
 	})

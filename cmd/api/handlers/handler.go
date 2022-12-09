@@ -21,18 +21,17 @@
  * @Description: 定义 所有API handler 的 输入输出参数
  */
 
-// 定义 Gin HTTP API 的 handler
+// 定义 Hertz HTTP API 的 handler
 package handlers
 
 import (
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 // SendResponse pack response
-func SendResponse(c *gin.Context, response interface{}) {
-	c.JSON(http.StatusOK, response)
+func SendResponse(c *app.RequestContext, response interface{}) {
+	c.JSON(consts.StatusOK, response)
 }
 
 // 用户注册 handler 输入参数

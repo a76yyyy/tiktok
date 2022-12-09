@@ -34,6 +34,7 @@ import (
 
 	"github.com/a76yyyy/tiktok/pkg/ttviper"
 	"github.com/cloudwego/kitex/pkg/klog"
+	hertzzap "github.com/hertz-contrib/logger/zap"
 	kitexzap "github.com/kitex-contrib/obs-opentelemetry/logging/zap"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -44,33 +45,31 @@ var (
 	config = ttviper.ConfigInit("TIKTOK_LOG", "logConfig")
 )
 
-// Init Logger config
-func InitLog(callerSkip int) *kitexzap.Logger {
+// build Logger Core from config
+func loggerBuild(callerSkip int) (zapcore.Encoder, zapcore.WriteSyncer, zap.AtomicLevel, []zap.Option, error) {
 	var cfg zap.Config
 	if err := json.Unmarshal(config.ZapLogConfig(), &cfg); err != nil {
-		panic(err)
+		return nil, nil, zap.AtomicLevel{}, nil, err
 	}
 
 	enc, err := newEncoder(cfg.Encoding, cfg.EncoderConfig)
 	if err != nil {
-		panic(err)
+		return nil, nil, zap.AtomicLevel{}, nil, err
 	}
 
 	if cfg.Level == (zap.AtomicLevel{}) {
-		panic(errors.New("missing Level"))
+		return nil, nil, zap.AtomicLevel{}, nil, errors.New("missing Level")
 	}
 
 	sink, closeOut, err := zap.Open(cfg.OutputPaths...)
 	if err != nil {
-		klog.Error(err)
-		return nil
+		return nil, nil, zap.AtomicLevel{}, nil, err
 	}
 
 	errSink, _, err := zap.Open(cfg.ErrorOutputPaths...)
 	if err != nil {
 		closeOut()
-		klog.Error(err)
-		return nil
+		return nil, nil, zap.AtomicLevel{}, nil, err
 	}
 
 	opts := []zap.Option{zap.ErrorOutput(errSink)}
@@ -122,8 +121,28 @@ func InitLog(callerSkip int) *kitexzap.Logger {
 
 	opts = append(opts, zap.AddCallerSkip(callerSkip))
 
-	logger := kitexzap.NewLogger(kitexzap.WithCoreEnc(enc), kitexzap.WithCoreWs(sink), kitexzap.WithCoreLevel(cfg.Level), kitexzap.WithZapOptions(opts...))
+	return enc, sink, cfg.Level, opts, nil
+}
 
+// Init Logger config
+func InitLog(callerSkip int) *kitexzap.Logger {
+	enc, sink, lvl, opts, err := loggerBuild(callerSkip)
+	if err != nil {
+		panic(err)
+	}
+
+	logger := kitexzap.NewLogger(kitexzap.WithCoreEnc(enc), kitexzap.WithCoreWs(sink), kitexzap.WithCoreLevel(lvl), kitexzap.WithZapOptions(opts...))
+	return logger
+}
+
+// Init Hertz Logger config
+func InitHertzLog(callerSkip int) *hertzzap.Logger {
+	enc, sink, lvl, opts, err := loggerBuild(callerSkip)
+	if err != nil {
+		panic(err)
+	}
+
+	logger := hertzzap.NewLogger(hertzzap.WithCoreEnc(enc), hertzzap.WithCoreWs(sink), hertzzap.WithCoreLevel(lvl), hertzzap.WithZapOptions(opts...))
 	return logger
 }
 
