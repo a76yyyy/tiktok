@@ -31,11 +31,11 @@ import (
 	"github.com/a76yyyy/tiktok/dal/pack"
 	"github.com/a76yyyy/tiktok/kitex_gen/relation"
 	"github.com/a76yyyy/tiktok/pkg/errno"
-	"github.com/gin-gonic/gin"
+	"github.com/cloudwego/hertz/pkg/app"
 )
 
 // 传递 关注操作 的上下文至 Relation 服务的 RPC 客户端, 并获取相应的响应.
-func RelationAction(c *gin.Context) {
+func RelationAction(ctx context.Context, c *app.RequestContext) {
 	var paramVar RelationActionParam
 	token := c.Query("token")
 	to_user_id := c.Query("to_user_id")
@@ -63,7 +63,7 @@ func RelationAction(c *gin.Context) {
 		ActionType: paramVar.ActionType,
 	}
 
-	resp, err := rpc.RelationAction(context.Background(), &rpcReq)
+	resp, err := rpc.RelationAction(ctx, &rpcReq)
 	if err != nil {
 		SendResponse(c, pack.BuildRelationActionResp(errno.ConvertErr(err)))
 		return
@@ -72,7 +72,7 @@ func RelationAction(c *gin.Context) {
 }
 
 // 传递 获取正在关注列表操作 的上下文至 Relation 服务的 RPC 客户端, 并获取相应的响应.
-func RelationFollowList(c *gin.Context) {
+func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 	var paramVar UserParam
 	uid, err := strconv.Atoi(c.Query("user_id"))
 	if err != nil {
@@ -87,7 +87,7 @@ func RelationFollowList(c *gin.Context) {
 		return
 	}
 
-	resp, err := rpc.RelationFollowList(context.Background(), &relation.DouyinRelationFollowListRequest{
+	resp, err := rpc.RelationFollowList(ctx, &relation.DouyinRelationFollowListRequest{
 		UserId: paramVar.UserId,
 		Token:  paramVar.Token,
 	})
@@ -99,7 +99,7 @@ func RelationFollowList(c *gin.Context) {
 }
 
 // 传递 获取粉丝列表操作 的上下文至 Relation 服务的 RPC 客户端, 并获取相应的响应.
-func RelationFollowerList(c *gin.Context) {
+func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 	var paramVar UserParam
 	uid, err := strconv.Atoi(c.Query("user_id"))
 	if err != nil {
@@ -114,7 +114,7 @@ func RelationFollowerList(c *gin.Context) {
 		return
 	}
 
-	resp, err := rpc.RelationFollowerList(context.Background(), &relation.DouyinRelationFollowerListRequest{
+	resp, err := rpc.RelationFollowerList(ctx, &relation.DouyinRelationFollowerListRequest{
 		UserId: paramVar.UserId,
 		Token:  paramVar.Token,
 	})

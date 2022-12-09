@@ -31,11 +31,11 @@ import (
 	"github.com/a76yyyy/tiktok/dal/pack"
 	"github.com/a76yyyy/tiktok/kitex_gen/feed"
 	"github.com/a76yyyy/tiktok/pkg/errno"
-	"github.com/gin-gonic/gin"
+	"github.com/cloudwego/hertz/pkg/app"
 )
 
 // 传递 获取用户视频流操作 的上下文至 Feed 服务的 RPC 客户端, 并获取相应的响应.
-func GetUserFeed(c *gin.Context) {
+func GetUserFeed(ctx context.Context, c *app.RequestContext) {
 	var feedVar FeedParam
 	var laststTime int64
 	var token string
@@ -54,7 +54,7 @@ func GetUserFeed(c *gin.Context) {
 	token = c.Query("token")
 	feedVar.Token = &token
 
-	resp, err := rpc.GetUserFeed(context.Background(), &feed.DouyinFeedRequest{
+	resp, err := rpc.GetUserFeed(ctx, &feed.DouyinFeedRequest{
 		LatestTime: feedVar.LatestTime,
 		Token:      feedVar.Token,
 	})

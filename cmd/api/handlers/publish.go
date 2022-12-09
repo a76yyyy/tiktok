@@ -33,16 +33,22 @@ import (
 	"github.com/a76yyyy/tiktok/dal/pack"
 	"github.com/a76yyyy/tiktok/kitex_gen/publish"
 	"github.com/a76yyyy/tiktok/pkg/errno"
-	"github.com/gin-gonic/gin"
+	"github.com/cloudwego/hertz/pkg/app"
 )
 
 // 传递 发布视频操作 的上下文至 Publish 服务的 RPC 客户端, 并获取相应的响应.
-func PublishAction(c *gin.Context) {
+func PublishAction(ctx context.Context, c *app.RequestContext) {
 	var paramVar PublishActionParam
 	token := c.PostForm("token")
 	title := c.PostForm("title")
 
-	file, _, err := c.Request.FormFile("data")
+	fileHeader, err := c.Request.FormFile("data")
+	if err != nil {
+		SendResponse(c, pack.BuildPublishResp(errno.ErrDecodingFailed))
+		return
+	}
+
+	file, err := fileHeader.Open()
 	if err != nil {
 		SendResponse(c, pack.BuildPublishResp(errno.ErrDecodingFailed))
 		return
@@ -58,7 +64,7 @@ func PublishAction(c *gin.Context) {
 	paramVar.Token = token
 	paramVar.Title = title
 
-	resp, err := rpc.PublishAction(context.Background(), &publish.DouyinPublishActionRequest{
+	resp, err := rpc.PublishAction(ctx, &publish.DouyinPublishActionRequest{
 		Title: paramVar.Title,
 		Token: paramVar.Token,
 		Data:  buf.Bytes(),
@@ -71,7 +77,7 @@ func PublishAction(c *gin.Context) {
 }
 
 // 传递 获取视频列表操作 的上下文至 Publish 服务的 RPC 客户端, 并获取相应的响应.
-func PublishList(c *gin.Context) {
+func PublishList(ctx context.Context, c *app.RequestContext) {
 	var paramVar UserParam
 	userid, err := strconv.Atoi(c.Query("user_id"))
 	if err != nil {
@@ -86,7 +92,7 @@ func PublishList(c *gin.Context) {
 		return
 	}
 
-	resp, err := rpc.PublishList(context.Background(), &publish.DouyinPublishListRequest{
+	resp, err := rpc.PublishList(ctx, &publish.DouyinPublishListRequest{
 		UserId: paramVar.UserId,
 		Token:  paramVar.Token,
 	})

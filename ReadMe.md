@@ -1,6 +1,6 @@
 # tiktok
 
-基于 kitex RPC微服务 + Gin HTTP服务完成的第三届字节跳动青训营-极简抖音后端项目
+基于 kitex RPC微服务 + Hertz HTTP服务完成的第三届字节跳动青训营-极简抖音后端项目
 
 ## 一、项目特点
 
@@ -45,7 +45,7 @@
 
 ![image.png](pic/%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E5%85%B3%E7%B3%BB.png)
 
-- HTTP 使用 GIN 开放 HTTP 端口, 通过封装的RPC客户端与微服务中的服务端通信;
+- HTTP 使用 Hertz 开放 HTTP 端口, 通过封装的RPC客户端与微服务中的服务端通信;
 
 - RPC 微服务, 接收客户端的请求, 在各自的 command 中实现与数据库交互的业务逻辑;
 
@@ -209,6 +209,4 @@
 
 5. 采用 Redis 作为 NoSQL 缓存，优化 JWT 鉴权，结合消息队列和 Redis 实现对定时更新 Token、各种操作数据 的缓存和持久性存储
 
-6. 使用 Hertz 替换 Gin, 提高 HTTP 层的性能和可扩展性
-
-7. 实现分库分表
+6. 实现分库分表

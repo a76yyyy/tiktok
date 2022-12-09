@@ -31,11 +31,11 @@ import (
 	"github.com/a76yyyy/tiktok/dal/pack"
 	"github.com/a76yyyy/tiktok/kitex_gen/user"
 	"github.com/a76yyyy/tiktok/pkg/errno"
-	"github.com/gin-gonic/gin"
+	"github.com/cloudwego/hertz/pkg/app"
 )
 
 // 传递 注册用户操作 的上下文至 User 服务的 RPC 客户端, 并获取相应的响应.
-func Register(c *gin.Context) {
+func Register(ctx context.Context, c *app.RequestContext) {
 	var registerVar UserRegisterParam
 	registerVar.UserName = c.Query("username")
 	registerVar.PassWord = c.Query("password")
@@ -45,7 +45,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	resp, err := rpc.Register(context.Background(), &user.DouyinUserRegisterRequest{
+	resp, err := rpc.Register(ctx, &user.DouyinUserRegisterRequest{
 		Username: registerVar.UserName,
 		Password: registerVar.PassWord,
 	})
@@ -57,7 +57,7 @@ func Register(c *gin.Context) {
 }
 
 // 传递 注册用户登录操作 的上下文至 User 服务的 RPC 客户端, 并获取相应的响应.
-func Login(c *gin.Context) {
+func Login(ctx context.Context, c *app.RequestContext) {
 	var registerVar UserRegisterParam
 	registerVar.UserName = c.Query("username")
 	registerVar.PassWord = c.Query("password")
@@ -67,7 +67,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	resp, err := rpc.Login(context.Background(), &user.DouyinUserRegisterRequest{
+	resp, err := rpc.Login(ctx, &user.DouyinUserRegisterRequest{
 		Username: registerVar.UserName,
 		Password: registerVar.PassWord,
 	})
@@ -79,7 +79,7 @@ func Login(c *gin.Context) {
 }
 
 // 传递 获取注册用户`UserID`操作 的上下文至 User 服务的 RPC 客户端, 并获取相应的响应.
-func GetUserById(c *gin.Context) {
+func GetUserById(ctx context.Context, c *app.RequestContext) {
 	var userVar UserParam
 	userid, err := strconv.Atoi(c.Query("user_id"))
 	if err != nil {
@@ -94,7 +94,7 @@ func GetUserById(c *gin.Context) {
 		return
 	}
 
-	resp, err := rpc.GetUserById(context.Background(), &user.DouyinUserRequest{
+	resp, err := rpc.GetUserById(ctx, &user.DouyinUserRequest{
 		UserId: userVar.UserId,
 		Token:  userVar.Token,
 	})
