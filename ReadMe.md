@@ -4,7 +4,7 @@
 
 ## 一、项目特点
 
-1. 采用RPC框架（Kitex）脚手架生成代码进行开发，基于 **RPC 微服务** + **Gin 提供 HTTP 服务**
+1. 采用RPC框架（Kitex）脚手架生成代码进行开发，基于 **RPC 微服务** + **Hertz 提供 HTTP 服务**
 
 2. 基于《[接口文档在线分享](https://www.apifox.cn/apidoc/shared-8cc50618-0da6-4d5e-a398-76f3b8f766c5/)[- Apifox](https://www.apifox.cn/apidoc/shared-8cc50618-0da6-4d5e-a398-76f3b8f766c5/)》提供的接口进行开发，使用《[极简抖音](https://bytedance.feishu.cn/docs/doccnM9KkBAdyDhg8qaeGlIz7S7)[App使用说明 - 青训营版](https://bytedance.feishu.cn/docs/doccnM9KkBAdyDhg8qaeGlIz7S7) 》提供的APK进行Demo测试， **功能完整实现** ，前端接口匹配良好。
 
@@ -32,8 +32,8 @@
 
 | 服务名称 | 模块介绍 | 技术框架 | 传输协议 | 注册中心 | 链路跟踪 | 数据存储 | 日志 | 配置存取 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| api| API服务将HTTP请求发送给RPC微服务端 | `Gorm` `Kitex` `Gin` | `http` | `etcd`| `opentelemetry` | 下一步计划采用Redis | `zapklog` | `viper` |
-| user | 用户管理微服务 | `Gorm` `Kitex` `Gin` `JWT` | `proto3` ||| `MySQL` `gorm` |
+| api| API服务将HTTP请求发送给RPC微服务端 | `Gorm` `Kitex` `Hertz` | `http` | `etcd`| `opentelemetry` | 下一步计划采用Redis | `zapklog` | `viper` |
+| user | 用户管理微服务 | `Gorm` `Kitex` `Hertz` `JWT` | `proto3` ||| `MySQL` `gorm` |
 | relation | 用户关注微服务 |
 | feed | 视频流微服务 |
 | favorite | 用户点赞微服务 |
@@ -63,7 +63,7 @@
 
 | 目录 | 子目录 | 说明 | 备注 |
 | --- | --- | --- | --- |
-| [cmd](https://github.com/a76yyyy/tiktok/tree/master/cmd) | [api](https://github.com/a76yyyy/tiktok/tree/master/cmd/api) | api 服务的 **业务代码** | 包含 [Gin](https://github.com/a76yyyy/tiktok/blob/master/cmd/api/main.go)和 [RPC_client](https://github.com/a76yyyy/tiktok/tree/master/cmd/api/rpc) |
+| [cmd](https://github.com/a76yyyy/tiktok/tree/master/cmd) | [api](https://github.com/a76yyyy/tiktok/tree/master/cmd/api) | api 服务的 **业务代码** | 包含 [Hertz](https://github.com/a76yyyy/tiktok/blob/master/cmd/api/main.go)和 [RPC_client](https://github.com/a76yyyy/tiktok/tree/master/cmd/api/rpc) |
 || [comment](https://github.com/a76yyyy/tiktok/tree/master/cmd/comment) | command 服务的业务代码 |
 || [favorite](https://github.com/a76yyyy/tiktok/tree/master/cmd/favorite) | favorite 服务的业务代码 |
 || [feed](https://github.com/a76yyyy/tiktok/tree/master/cmd/feed) | feed 服务的业务代码 |
